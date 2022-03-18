@@ -27,13 +27,14 @@ export async function main (ns) {
     .filter(s => s !== 'home')
   for (const server of servers) {
     if (ns.hasRootAccess(server)) {
-      if (ns.scriptRunning(script, server) && restart === 'y') {
+      const running = ns.scriptRunning(script, server)
+      if (running && restart === 'y') {
         ns.scriptKill(script, server)
       }
       await ns.scp(script, server)
       const threadNum = threads === 0 ? Math.floor((ns.getServerMaxRam(server) - ns.getServerUsedRam(server)) / ns.getScriptRam(script)) : threads
       if (threadNum > 0) {
-        if (restart === 'y') {
+        if (restart === 'y' || !running) {
           ns.exec(script, server, threadNum, ...scriptArgs)
         }
       } else {

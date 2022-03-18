@@ -75,6 +75,7 @@ function solve (type, data, server, contract, ns) {
 /** @param {NS} ns **/
 export async function main (ns) {
   ns.disableLog('codingcontract.attempt')
+  ns.disableLog('sleep')
   const boughtServers = ns.getPurchasedServers(ns)
   const servers = listServers(ns).filter(s => s !== 'darkweb')
     .filter(s => s !== 'home')

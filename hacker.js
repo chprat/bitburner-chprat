@@ -46,6 +46,7 @@ export async function hack (ns, server) {
 
 /** @param {NS} ns **/
 export async function main (ns) {
+  ns.disableLog('sleep')
   const servers = listServers(ns).filter(s => s !== 'darkweb')
     .filter(s => s !== 'home')
     .filter(s => s !== ns.getHostname())

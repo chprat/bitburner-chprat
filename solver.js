@@ -33,7 +33,7 @@ function solve (type, data, server, contract, ns) {
       solution = maxProfit(data)
       break
     case 'Minimum Path Sum in a Triangle':
-      solution = solveTriangleSum(data, ns)
+      solution = solveTriangleSum(data)
       break
     case 'Unique Paths in a Grid I':
       solution = uniquePathsI(data)

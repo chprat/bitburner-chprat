@@ -268,7 +268,7 @@ function mergeOverlap (intervals) {
     for (let j = i + 1; j < intervals.length; j++) {
       const [min, max] = intervals[i]
       const [laterMin, laterMax] = intervals[j]
-      if (laterMin < max) {
+      if (laterMin <= max) {
         const newMax = laterMax > max ? laterMax : max
         const newInterval = [min, newMax]
         intervals[i] = newInterval

@@ -22,6 +22,40 @@ export async function deploy (ns, serverName, scriptName, threads, restart, ...s
   }
 }
 
+export async function onHome (ns) {
+  const scripts = [{ name: 'rooter.js', threads: 1, mem: 0 },
+    { name: 'deployer.js', threads: 1, mem: 0 },
+    { name: 'solver.js', threads: 0, mem: 0 },
+    { name: 'hacker.js', threads: 0, mem: 0 }]
+  for (const script of scripts) {
+    script.mem = ns.getScriptRam(script.name)
+  }
+  const homeRAM = ns.getServerMaxRam('home')
+  let scriptRAM = scripts.find(e => e.name === 'rooter.js').mem
+  scriptRAM += scripts.find(e => e.name === 'hacker.js').mem
+  scriptRAM += scripts.find(e => e.name === 'deployer.js').mem
+  let freeRAM = homeRAM - scriptRAM
+  if (freeRAM > scripts.find(e => e.name === 'solver.js').mem) {
+    scripts.find(e => e.name === 'solver.js').threads = 1
+    scriptRAM += scripts.find(e => e.name === 'solver.js').mem
+    freeRAM = homeRAM - scriptRAM
+  }
+  const hackThreads = Math.floor(freeRAM / scripts.find(e => e.name === 'hacker.js').mem) - 1
+  scripts.find(e => e.name === 'hacker.js').threads = (hackThreads > 1) ? hackThreads : 1
+  for (const script of scripts) {
+    if (!ns.scriptRunning(script.name, 'home')) {
+      if (script.threads > 0) { ns.run(script.name, script.threads) }
+    }
+    if (script.name === 'hacker.js') {
+      const activeHackThreads = ns.getRunningScript('hacker.js').threads
+      if (activeHackThreads !== script.threads) {
+        ns.kill(script.name, 'home')
+        ns.run(script.name, script.threads)
+      }
+    }
+  }
+}
+
 /** @param {NS} ns **/
 export async function main (ns) {
   ns.disableLog('sleep')
@@ -33,14 +67,17 @@ export async function main (ns) {
   const threads = ns.args[1]
   const restart = ns.args[2]
   const scriptArgs = ns.args.slice(3)
-  const servers = listServers(ns).filter(s => s !== 'darkweb')
-    .filter(s => s !== 'home')
   if (script !== undefined) {
+    const servers = listServers(ns).filter(s => s !== 'darkweb')
+      .filter(s => s !== 'home')
     for (const serverName of servers) {
       deploy(ns, serverName, script, threads, restart, scriptArgs)
     }
   } else {
     while (true) {
+      const servers = listServers(ns).filter(s => s !== 'darkweb')
+        .filter(s => s !== 'home')
+      onHome(ns)
       for (const serverName of servers) {
         await deploy(ns, serverName, '/imports/scanner.js', -1)
         await deploy(ns, serverName, 'hacker.js', 0)

@@ -48,7 +48,7 @@ function own (ns, server) {
       ns.sqlinject(server)
     }
     if (!srv.backdoorInstalled) {
-      ns.print(server + ' has no backdoor installed')
+      ns.print(`${server} has no backdoor installed`)
     }
   }
 }
@@ -57,6 +57,12 @@ function own (ns, server) {
 export async function main (ns) {
   ns.disableLog('getHackingLevel')
   ns.disableLog('sleep')
+  ns.disableLog('brutessh')
+  ns.disableLog('ftpcrack')
+  ns.disableLog('relaysmtp')
+  ns.disableLog('httpworm')
+  ns.disableLog('sqlinject')
+  ns.disableLog('nuke')
   const servers = listServers(ns).filter(s => s !== 'darkweb')
     .filter(s => s !== 'home')
     .filter(s => !s.includes('psrv'))

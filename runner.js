@@ -4,6 +4,5 @@ export async function main (ns) {
   ns.run('deployer.js', 1)
   ns.run('weaker.js', 1)
   ns.run('solver.js', 1)
-  ns.run('catcher.js', 1)
   ns.run('hacker.js', 80)
 }

@@ -57,10 +57,9 @@ function own (ns, server) {
 export async function main (ns) {
   ns.disableLog('getHackingLevel')
   ns.disableLog('sleep')
-  const boughtServers = ns.getPurchasedServers(ns)
   const servers = listServers(ns).filter(s => s !== 'darkweb')
     .filter(s => s !== 'home')
-    .filter(s => !boughtServers.includes(s))
+    .filter(s => !s.includes('psrv'))
   while (true) {
     for (const server of servers) {
       own(ns, server)

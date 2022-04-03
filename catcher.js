@@ -10,13 +10,13 @@ export async function files (ns, server) {
   for (const file of files) {
     try {
       await ns.scp(file, server, 'home')
-      ns.print('Copied ' + file + ' from ' + server)
+      ns.tprint(`Copied ${file} from ${server}`)
     } catch (err) {
-      ns.print('Skipped file ' + file + ' from ' + server)
+      ns.tprint(`Skipped file ${file} from ${server}`)
       continue
     }
     if (!ns.fileExists(file, 'home')) {
-      ns.print("Couldn't copy " + file + ' from ' + server)
+      ns.tprint(`Couldn't copy ${file} from ${server}`)
     }
   }
 }
@@ -27,10 +27,7 @@ export async function main (ns) {
   const servers = listServers(ns).filter(s => s !== 'darkweb')
     .filter(s => s !== 'home')
     .filter(s => !s.includes('psrv'))
-  while (true) {
-    for (const server of servers) {
-      await files(ns, server)
-    }
-    await ns.sleep(600000)
+  for (const server of servers) {
+    await files(ns, server)
   }
 }

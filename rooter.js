@@ -70,6 +70,7 @@ export async function main (ns) {
     for (const server of servers) {
       own(ns, server)
     }
-    await ns.sleep(600000)
+    const sleepTime = (Math.floor(ns.getTimeSinceLastAug() / (1000 * 60)) < 30) ? 60000 : 600000
+    await ns.sleep(sleepTime)
   }
 }

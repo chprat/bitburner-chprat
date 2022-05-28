@@ -7,6 +7,7 @@ import { hammingDecode } from 'imports/hammingDecode.js'
 import { proper2ColoringOfAGraph } from 'imports/proper2ColoringOfAGraph.js'
 import { rleCompress } from 'imports/rleCompress.js'
 import { lzDecompress } from 'imports/lzDecompress.js'
+import { lzCompress } from 'imports/lzCompress.js'
 
 function solve (type, data, server, contract, ns) {
   let solution = '~'
@@ -82,6 +83,9 @@ function solve (type, data, server, contract, ns) {
       break
     case 'Compression II: LZ Decompression':
       solution = lzDecompress(data)
+      break
+    case 'Compression III: LZ Compression':
+      solution = lzCompress(data)
       break
     default:
       ns.print(`New type on ${server}: ${contract} is of type ${type}`)

@@ -71,6 +71,9 @@ function solve (type, data, server, contract, ns) {
     case 'HammingCodes: Encoded Binary to Integer':
       solution = hammingDecode(data)
       break
+    default:
+      ns.print(`New type on ${server}: ${contract} is of type ${type}`)
+      ns.print(ns.codingcontract.getDescription(contract, server))
   }
   return (solution !== '~') ? ns.codingcontract.attempt(solution, contract, server, { returnReward: true }) : ''
 }

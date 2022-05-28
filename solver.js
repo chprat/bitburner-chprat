@@ -344,7 +344,7 @@ function Sanitize (data) {
     return data
   }
   let currentPossible = [data]
-  for (let i = 0; i < currentPossible.length; i++) {
+  while (currentPossible.length >= 0) {
     let newPossible = new Set()
     for (let j = 0; j < currentPossible.length; j++) {
       const newRemovedPossible = SanitizeRemoveOneParth(currentPossible[j])

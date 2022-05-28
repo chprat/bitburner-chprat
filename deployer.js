@@ -22,19 +22,39 @@ export async function deploy (ns, serverName, scriptName, threads, restart, ...s
   }
 }
 
+export async function runAndWait (ns, script, server) {
+  const pid = ns.run(script.name, script.threads)
+  if (pid === 0) {
+    ns.print(`Error running script ${script.name}`)
+  } else {
+    while (ns.scriptRunning(script.name, server)) {
+      await ns.sleep(10)
+    }
+  }
+  return pid
+}
+
 export async function onHome (ns) {
   const scripts = [{ name: 'rooter.js', threads: 1, mem: 0 },
     { name: 'deployer.js', threads: 1, mem: 0 },
+    { name: 'gang.js', threads: 1, mem: 0 },
     { name: 'solver.js', threads: 0, mem: 0 },
     { name: 'hacker.js', threads: 0, mem: 0 },
     { name: 'trader.js', threads: 0, mem: 0 }]
+  const waitForScripts = ['gang.js']
   for (const script of scripts) {
     script.mem = ns.getScriptRam(script.name)
   }
+  const waitForScriptsRAM = []
+  for (const waitForScript of waitForScripts) {
+    waitForScriptsRAM.push(scripts.find(e => e.name === waitForScript).mem)
+  }
+  const maxWaitForScriptsRAM = Math.max(...waitForScriptsRAM)
   const homeRAM = ns.getServerMaxRam('home')
   let scriptRAM = scripts.find(e => e.name === 'rooter.js').mem
   scriptRAM += scripts.find(e => e.name === 'hacker.js').mem
   scriptRAM += scripts.find(e => e.name === 'deployer.js').mem
+  scriptRAM += maxWaitForScriptsRAM
   let freeRAM = homeRAM - scriptRAM
   if (freeRAM > scripts.find(e => e.name === 'solver.js').mem) {
     scripts.find(e => e.name === 'solver.js').threads = 1
@@ -50,13 +70,26 @@ export async function onHome (ns) {
   scripts.find(e => e.name === 'hacker.js').threads = (hackThreads > 1) ? hackThreads : 1
   for (const script of scripts) {
     if (!ns.scriptRunning(script.name, 'home')) {
-      if (script.threads > 0) { ns.run(script.name, script.threads) }
+      if (script.threads > 0) {
+        let pid
+        if (waitForScripts.includes(script.name)) {
+          pid = await runAndWait(ns, script, 'home')
+        } else {
+          pid = ns.run(script.name, script.threads)
+        }
+        if (pid === 0) {
+          ns.print(`Error running script ${script.name}`)
+        }
+      }
     }
     if (script.name === 'hacker.js') {
-      const activeHackThreads = ns.getRunningScript('hacker.js').threads
+      const activeHackThreads = ns.getRunningScript('hacker.js') === undefined ? ns.getRunningScript('hacker.js').threads : 0
       if (activeHackThreads !== script.threads) {
         ns.kill(script.name, 'home')
-        ns.run(script.name, script.threads)
+        const pid = ns.run(script.name, script.threads)
+        if (pid === 0) {
+          ns.print(`Error running script ${script.name}`)
+        }
       }
     }
   }
@@ -84,7 +117,7 @@ export async function main (ns) {
     while (true) {
       const servers = listServers(ns).filter(s => s !== 'darkweb')
         .filter(s => s !== 'home')
-      onHome(ns)
+      await onHome(ns)
       for (const serverName of servers) {
         await deploy(ns, serverName, '/imports/scanner.js', -1)
         await deploy(ns, serverName, 'hacker.js', 0)

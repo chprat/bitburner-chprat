@@ -38,10 +38,11 @@ export async function onHome (ns) {
   const scripts = [{ name: 'rooter.js', threads: 1, mem: 0 },
     { name: 'deployer.js', threads: 1, mem: 0 },
     { name: 'gang.js', threads: 1, mem: 0 },
+    { name: 'hacknet.js', threads: 1, mem: 0 },
     { name: 'solver.js', threads: 0, mem: 0 },
     { name: 'hacker.js', threads: 0, mem: 0 },
     { name: 'trader.js', threads: 0, mem: 0 }]
-  const waitForScripts = ['gang.js']
+  const waitForScripts = ['gang.js', 'hacknet.js']
   for (const script of scripts) {
     script.mem = ns.getScriptRam(script.name)
   }

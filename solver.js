@@ -1,4 +1,5 @@
 import { listServers } from 'imports/scanner.js'
+import { hammingDecode } from 'imports/hammingDecode.js'
 
 function solve (type, data, server, contract, ns) {
   let solution = '~'
@@ -50,6 +51,9 @@ function solve (type, data, server, contract, ns) {
       break
     case 'Find All Valid Math Expressions':
       solution = getExprs(data)
+      break
+    case 'HammingCodes: Encoded Binary to Integer':
+      solution = hammingDecode(data)
       break
   }
   return (solution !== '~') ? ns.codingcontract.attempt(solution, contract, server, { returnReward: true }) : ''

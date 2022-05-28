@@ -26,3 +26,4 @@ Sources I used for the scripts
 
 * https://gist.github.com/OrangeDrangon/8a08d2d7d425fddd2558e1c0c5fae78b
 * https://github.com/bitburner-official/bitburner-scripts
+* https://raw.githubusercontent.com/adamadair/bitburner/main/scripts/contract-auto-solver.js

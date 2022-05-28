@@ -1,4 +1,5 @@
 import { listServers } from 'imports/scanner.js'
+import { arrayJumpingGame2 } from 'imports/arrayJumpingGame2.js'
 import { hammingEncode } from 'imports/hammingEncode.js'
 import { hammingDecode } from 'imports/hammingDecode.js'
 
@@ -49,6 +50,9 @@ function solve (type, data, server, contract, ns) {
       break
     case 'Array Jumping Game':
       solution = (solveJump(data)) ? 1 : 0
+      break
+    case 'Array Jumping Game II':
+      solution = (arrayJumpingGame2(data))
       break
     case 'Find All Valid Math Expressions':
       solution = getExprs(data)

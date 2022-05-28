@@ -82,7 +82,8 @@ export async function main (ns) {
         await deploy(ns, serverName, '/imports/scanner.js', -1)
         await deploy(ns, serverName, 'hacker.js', 0)
       }
-      await ns.sleep(600000)
+      const sleepTime = (Math.floor(ns.getTimeSinceLastAug() / (1000 * 60)) < 30) ? 60000 : 600000
+      await ns.sleep(sleepTime)
     }
   }
 }

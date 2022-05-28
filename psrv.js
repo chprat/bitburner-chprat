@@ -1,16 +1,33 @@
 /** @param {NS} ns **/
 export async function main (ns) {
-  const buy = ns.args[0]
-  ns.tprint('Limit: ' + ns.getPurchasedServerLimit())
+  ns.disableLog('purchaseServer')
+  const serverLimit = ns.getPurchasedServerLimit()
   const servers = ns.getPurchasedServers()
-  ns.tprint('Servers: ' + servers.length + ' ' + servers)
-  const maxRAM = ns.getPurchasedServerMaxRam()
-  const stages = Math.log2(maxRAM)
-  for (let i = 1; i <= stages; ++i) {
-    ns.tprint(`${ns.nFormat(i, '00')}: ${ns.nFormat((2 ** i) * 1000 * 1000 * 1000, '0b')} RAM costs ${ns.nFormat(ns.getPurchasedServerCost(2 ** i), '$0.000a')}`)
-  }
-  if (buy) {
-    ns.purchaseServer('psrv', 2 ** buy)
-    ns.tprint(`Bought a server with ${ns.nFormat((2 ** buy) * 1000 * 1000 * 1000, '0b')} RAM`)
+  ns.print(`${servers.length}/${serverLimit} servers owned`)
+  if (servers.length < serverLimit) {
+    const ramSize = 2 ** 10
+    if (ns.getPurchasedServerCost(ramSize) < ns.getPlayer().money) {
+      const name = ns.purchaseServer('psrv', ramSize)
+      ns.print(`Bought server ${name} with ${ns.nFormat((ramSize) * 1000 * 1000 * 1000, '0b')} RAM for ${ns.nFormat(ns.getPurchasedServerCost(ramSize), '$0.000a')}`)
+    } else {
+      ns.print(`Not enough money to buy a new server with ${ns.nFormat((ramSize) * 1000 * 1000 * 1000, '0b')} RAM (need ${ns.nFormat(ns.getPurchasedServerCost(ramSize), '$0.000a')})`)
+    }
+  } else {
+    const ramSize = ns.getPurchasedServerMaxRam()
+    if (ns.getPurchasedServerCost(ramSize) < ns.getPlayer().money) {
+      for (const server of servers) {
+        if (ns.getServerMaxRam(server) < ramSize) {
+          const wasDeleted = ns.deleteServer(server)
+          if (wasDeleted) {
+            ns.print(`Removed server ${server}`)
+          }
+          const name = ns.purchaseServer('psrv', ramSize)
+          ns.print(`Bought server ${name} with ${ns.nFormat((ramSize) * 1000 * 1000 * 1000, '0b')} RAM for ${ns.nFormat(ns.getPurchasedServerCost(ramSize), '$0.000a')}`)
+          break
+        }
+      }
+    } else {
+      ns.print(`Not enough money to buy a new server with ${ns.nFormat((ramSize) * 1000 * 1000 * 1000, '0b')} RAM (need ${ns.nFormat(ns.getPurchasedServerCost(ramSize), '$0.000a')})`)
+    }
   }
 }

@@ -4,6 +4,7 @@ import { shortestPathInAGrid } from 'imports/shortestPathInAGrid.js'
 import { totalWaysToSum2 } from 'imports/totalWaysToSum2.js'
 import { hammingEncode } from 'imports/hammingEncode.js'
 import { hammingDecode } from 'imports/hammingDecode.js'
+import { proper2ColoringOfAGraph } from 'imports/proper2ColoringOfAGraph.js'
 
 function solve (type, data, server, contract, ns) {
   let solution = '~'
@@ -70,6 +71,9 @@ function solve (type, data, server, contract, ns) {
       break
     case 'HammingCodes: Encoded Binary to Integer':
       solution = hammingDecode(data)
+      break
+    case 'Proper 2-Coloring of a Graph':
+      solution = proper2ColoringOfAGraph(data)
       break
     default:
       ns.print(`New type on ${server}: ${contract} is of type ${type}`)

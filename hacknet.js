@@ -1,24 +1,34 @@
+export async function upgrade (ns, nodeId) {
+  const newNodeMaxCost = 76000000
+  const upgrades = [{ type: 'ram', cost: 0 },
+    { type: 'core', cost: 0 },
+    { type: 'level', cost: 0 }]
+  upgrades.find(e => e.type === 'ram').cost = ns.hacknet.getRamUpgradeCost(nodeId, 1)
+  upgrades.find(e => e.type === 'core').cost = ns.hacknet.getCoreUpgradeCost(nodeId, 1)
+  upgrades.find(e => e.type === 'level').cost = ns.hacknet.getLevelUpgradeCost(nodeId, 1)
+  const availUpgrades = upgrades.filter(e => e.cost !== Infinity).sort(function (a, b) { return a.cost - b.cost })
+  if (availUpgrades.length === 0) { return false }
+  if (availUpgrades[0].cost > ns.getPlayer().money) { return false }
+  if (availUpgrades[0].cost > ns.hacknet.getPurchaseNodeCost()) {
+    if ((ns.hacknet.getPurchaseNodeCost() < newNodeMaxCost) && (ns.getPlayer().money > newNodeMaxCost)) { ns.hacknet.purchaseNode() }
+    return false
+  }
+  if (availUpgrades[0].type === 'ram') { ns.hacknet.upgradeRam(nodeId, 1) } else if (availUpgrades[0].type === 'core') { ns.hacknet.upgradeCore(nodeId, 1) } else if (availUpgrades[0].type === 'level') { ns.hacknet.upgradeLevel(nodeId, 1) } else { return false }
+  return true
+}
+
 /** @param {NS} ns **/
 export async function main (ns) {
-  const num = (ns.args[0]) ? ns.args[0] : 1
-  const buy = ns.args[1]
-  const levels = 19
-  const cores = 2
-  const rams = 4
-  const nodeCost = ns.hacknet.getPurchaseNodeCost()
-  const ramCost = ns.hacknet.getRamUpgradeCost(0, rams)
-  const coreCost = ns.hacknet.getCoreUpgradeCost(0, cores)
-  const levelCost = ns.hacknet.getLevelUpgradeCost(0, levels)
-  const totalCost = (nodeCost + ramCost + coreCost + levelCost) * num
-  ns.tprint(`Total cost for ${num} new node(s): ${ns.nFormat(totalCost, '$0.000a')}`)
-  if (buy === 'y') {
-    for (let i = 0; i < num; ++i) {
-      ns.hacknet.purchaseNode()
-      const node = ns.hacknet.numNodes() - 1
-      ns.hacknet.upgradeCore(node, cores)
-      ns.hacknet.upgradeLevel(node, levels)
-      ns.hacknet.upgradeRam(node, rams)
+  if (ns.hacknet.numNodes() === 0) {
+    const nodeId = ns.hacknet.purchaseNode()
+    if (nodeId === -1) {
+      ns.print('Not enough money to buy your first node')
     }
-    ns.tprint('Bought ' + num + ' new hacknet nodes')
   }
+  let i = 0
+  while (i < ns.hacknet.numNodes()) {
+    while (await upgrade(ns, i) === true) { await ns.sleep(100) }
+    i++
+  }
+  ns.print('HackNet script finished')
 }

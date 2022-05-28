@@ -17,7 +17,7 @@ export async function deploy (ns, serverName, scriptName, threads, restart, ...s
         ns.print(`Executed ${scriptName} on ${serverName} with ${threadNum} threads`)
       }
     } else if (threadNum !== -1) {
-      ns.print(`Not enough memory to run ${scriptName} on ${serverName}`)
+      ns.print(`Not enough memory to run ${scriptName} on ${serverName} (${ns.getServerMaxRam(serverName)} GB RAM available)`)
     }
   }
 }
@@ -26,7 +26,8 @@ export async function onHome (ns) {
   const scripts = [{ name: 'rooter.js', threads: 1, mem: 0 },
     { name: 'deployer.js', threads: 1, mem: 0 },
     { name: 'solver.js', threads: 0, mem: 0 },
-    { name: 'hacker.js', threads: 0, mem: 0 }]
+    { name: 'hacker.js', threads: 0, mem: 0 },
+    { name: 'trader.js', threads: 0, mem: 0 }]
   for (const script of scripts) {
     script.mem = ns.getScriptRam(script.name)
   }
@@ -38,6 +39,11 @@ export async function onHome (ns) {
   if (freeRAM > scripts.find(e => e.name === 'solver.js').mem) {
     scripts.find(e => e.name === 'solver.js').threads = 1
     scriptRAM += scripts.find(e => e.name === 'solver.js').mem
+    freeRAM = homeRAM - scriptRAM
+  }
+  if (freeRAM > scripts.find(e => e.name === 'trader.js').mem) {
+    scripts.find(e => e.name === 'trader.js').threads = 1
+    scriptRAM += scripts.find(e => e.name === 'trader.js').mem
     freeRAM = homeRAM - scriptRAM
   }
   const hackThreads = Math.floor(freeRAM / scripts.find(e => e.name === 'hacker.js').mem) - 1
@@ -63,6 +69,7 @@ export async function main (ns) {
   ns.disableLog('getServerMaxRam')
   ns.disableLog('getServerUsedRam')
   ns.disableLog('exec')
+  ns.disableLog('run')
   const script = ns.args[0]
   const threads = ns.args[1]
   const restart = ns.args[2]

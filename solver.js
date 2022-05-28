@@ -1,5 +1,6 @@
 import { listServers } from 'imports/scanner.js'
 import { arrayJumpingGame2 } from 'imports/arrayJumpingGame2.js'
+import { shortestPathInAGrid } from 'imports/shortestPathInAGrid.js'
 import { totalWaysToSum2 } from 'imports/totalWaysToSum2.js'
 import { hammingEncode } from 'imports/hammingEncode.js'
 import { hammingDecode } from 'imports/hammingDecode.js'
@@ -57,6 +58,9 @@ function solve (type, data, server, contract, ns) {
       break
     case 'Find All Valid Math Expressions':
       solution = getExprs(data)
+      break
+    case 'Shortest Path in a Grid':
+      solution = shortestPathInAGrid(data)
       break
     case 'Total Ways to Sum II':
       solution = totalWaysToSum2(data)

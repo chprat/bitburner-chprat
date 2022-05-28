@@ -75,6 +75,7 @@ function solve (type, data, server, contract, ns) {
       ns.print(`New type on ${server}: ${contract} is of type ${type}`)
       ns.print(ns.codingcontract.getDescription(contract, server))
   }
+  ns.print(`${type} - ${data} - ${solution}`)
   return (solution !== '~') ? ns.codingcontract.attempt(solution, contract, server, { returnReward: true }) : ''
 }
 

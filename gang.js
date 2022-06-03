@@ -21,6 +21,8 @@ export async function main (ns) {
     ns.print(`New member ${newMemberName} recruited`)
     members.push(newMemberName)
     detailedMembers.push(ns.gang.getMemberInformation(newMemberName))
+    const workTasks = tasks.filter(t => t !== 'Unassigned')
+    ns.gang.setMemberTask(newMemberName, workTasks[0])
   }
 
   for (const member of members) {
@@ -45,10 +47,22 @@ export async function main (ns) {
       ns.gang.setMemberTask(member, task)
     }
   } else if (gangInformation.wantedLevel < 2 && detailedMembers[0].task.startsWith('Vigilante')) {
-    const task = tasks.find(element => element.startsWith('Run'))
-    ns.print(`Time to work: ${task}`)
     for (const member of members) {
-      ns.gang.setMemberTask(member, task)
+      const workTasks = tasks.filter(t => t !== 'Unassigned')
+      const moneyGains = {}
+      for (const workTask of workTasks) {
+        ns.gang.setMemberTask(member, workTask)
+        moneyGains[workTask] = ns.gang.getMemberInformation(member).moneyGain
+      }
+      const maxMoneyGain = { task: '', gain: 0 }
+      Object.keys(moneyGains).forEach(function (elem) {
+        if (moneyGains[elem] > maxMoneyGain.gain) {
+          maxMoneyGain.gain = moneyGains[elem]
+          maxMoneyGain.task = elem
+        }
+      })
+      ns.print(`Time to work: ${maxMoneyGain.task}`)
+      ns.gang.setMemberTask(member, maxMoneyGain.task)
     }
   }
 }

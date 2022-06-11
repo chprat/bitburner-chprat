@@ -46,7 +46,8 @@ export async function main (ns) {
     for (const member of members) {
       ns.gang.setMemberTask(member, task)
     }
-  } else if (gangInformation.wantedLevel < 2 && detailedMembers[0].task.startsWith('Vigilante')) {
+  } else if ((gangInformation.wantedLevel < 2 && detailedMembers[0].task.startsWith('Vigilante')) ||
+             !detailedMembers[0].task.startsWith('Vigilante')) {
     for (const member of members) {
       const workTasks = tasks.filter(t => t !== 'Unassigned')
       const moneyGains = {}

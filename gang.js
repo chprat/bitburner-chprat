@@ -34,6 +34,8 @@ export async function main (ns) {
     Object.keys(ascensionResult).forEach(function (elem) {
       if (ascensionResult[elem] > 3) {
         ns.gang.ascendMember(member)
+        const workTasks = tasks.filter(t => t !== 'Unassigned')
+        ns.gang.setMemberTask(member, workTasks[0])
         ns.print(`Ascended ${member}`)
       }
     })
@@ -55,7 +57,7 @@ export async function main (ns) {
         ns.gang.setMemberTask(member, workTask)
         moneyGains[workTask] = ns.gang.getMemberInformation(member).moneyGain
       }
-      const maxMoneyGain = { task: '', gain: 0 }
+      const maxMoneyGain = { task: workTasks[0], gain: 0 }
       Object.keys(moneyGains).forEach(function (elem) {
         if (moneyGains[elem] > maxMoneyGain.gain) {
           maxMoneyGain.gain = moneyGains[elem]

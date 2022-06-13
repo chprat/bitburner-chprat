@@ -3,6 +3,9 @@ export async function main (ns) {
   if (!ns.gang.inGang()) {
     return
   }
+ 
+  const isHackingGang = ns.gang.getGangInformation().isHacking
+ 
   const tasks = ns.gang.getTaskNames()
   const detailedTasks = []
   for (const task of tasks) {
@@ -15,6 +18,53 @@ export async function main (ns) {
     detailedMembers.push(ns.gang.getMemberInformation(member))
   }
 
+  const equipments = ns.gang.getEquipmentNames()
+  let detailedEquipments = []
+  let detailedAugmentations = []
+  for (const equipment of equipments) {
+    const detailedEquipment = ns.gang.getEquipmentStats(equipment)
+    detailedEquipment.name = equipment
+    detailedEquipment.type = ns.gang.getEquipmentType(equipment)
+    detailedEquipment.cost = ns.gang.getEquipmentCost(equipment)
+    if (detailedEquipment.type === "Augmentation") {
+      detailedAugmentations.push(detailedEquipment)
+    } else {
+      detailedEquipments.push(detailedEquipment)
+    }
+  }
+
+  if (isHackingGang) {
+    const hackEquip = detailedEquipments.filter(e => e?.hack > 0)
+    const chaEquip = detailedEquipments.filter(e => e?.cha > 0)
+    const filteredDetailedEquipments = [...hackEquip, ...chaEquip]
+    const uniqueFilteredDetailedEquipments = [...new Map(filteredDetailedEquipments.map(e => [e["name"], e])).values()]
+    detailedEquipments = uniqueFilteredDetailedEquipments
+    const hackAugs = detailedAugmentations.filter(e => e?.hack > 0)
+    const chaAugs = detailedAugmentations.filter(e => e?.cha > 0)
+    const filteredDetailedAugmentations = [...hackAugs, ...chaAugs]
+    const uniqueFilteredDetailedAugmentations = [...new Map(filteredDetailedAugmentations.map(e => [e["name"], e])).values()]
+    detailedAugmentations = uniqueFilteredDetailedAugmentations
+  } else {
+    const agiEquip = detailedEquipments.filter(e => e?.agi > 0)
+    const defEquip = detailedEquipments.filter(e => e?.def > 0)
+    const dexEquip = detailedEquipments.filter(e => e?.dex > 0)
+    const strEquip = detailedEquipments.filter(e => e?.str > 0)
+    const chaEquip = detailedEquipments.filter(e => e?.cha > 0)
+    const filteredDetailedEquipments = [...agiEquip, ...defEquip, ...dexEquip, ...strEquip, ...chaEquip]
+    const uniqueFilteredDetailedEquipments = [...new Map(filteredDetailedEquipments.map(e => [e["name"], e])).values()]
+    detailedEquipments = uniqueFilteredDetailedEquipments
+    const agiAugs = detailedAugmentations.filter(e => e?.agi > 0)
+    const defAugs = detailedAugmentations.filter(e => e?.def > 0)
+    const dexAugs = detailedAugmentations.filter(e => e?.dex > 0)
+    const strAugs = detailedAugmentations.filter(e => e?.str > 0)
+    const chaAugs = detailedAugmentations.filter(e => e?.cha > 0)
+    const filteredDetailedAugmentations = [...agiAugs, ...defAugs, ...dexAugs, ...strAugs, ...chaAugs]
+    const uniqueFilteredDetailedAugmentations = [...new Map(filteredDetailedAugmentations.map(e => [e["name"], e])).values()]
+    detailedAugmentations = uniqueFilteredDetailedAugmentations
+  }
+  detailedEquipments = detailedEquipments.sort((a, b) => a.cost - b.cost)
+  detailedAugmentations = detailedAugmentations.sort((a, b) => a.cost - b.cost)
+  
   if (ns.gang.canRecruitMember()) {
     const newMemberName = `mem${members.length + 1}`
     ns.gang.recruitMember(newMemberName)
@@ -39,6 +89,25 @@ export async function main (ns) {
         ns.print(`Ascended ${member}`)
       }
     })
+  }
+
+  for (const member of members) {
+    const memberAugmentations = ns.gang.getMemberInformation(member).augmentations
+    const memberUpgrades = ns.gang.getMemberInformation(member).upgrades
+    for (const aug of detailedAugmentations) {
+      if (!memberAugmentations.includes(aug)) {
+        if (ns.getPlayer().money > aug.cost) {
+          ns.gang.purchaseEquipment(member, aug.name)
+        }
+      }
+    }
+    for (const equ of detailedEquipments) {
+      if (!memberUpgrades.includes(equ)) {
+        if (ns.getPlayer().money > equ.cost) {
+          ns.gang.purchaseEquipment(member, equ.name)
+        }
+      }
+    }
   }
 
   const gangInformation = ns.gang.getGangInformation()

@@ -3,9 +3,9 @@ export async function main (ns) {
   if (!ns.gang.inGang()) {
     return
   }
- 
+
   const isHackingGang = ns.gang.getGangInformation().isHacking
- 
+
   const tasks = ns.gang.getTaskNames()
   const detailedTasks = []
   for (const task of tasks) {
@@ -26,7 +26,7 @@ export async function main (ns) {
     detailedEquipment.name = equipment
     detailedEquipment.type = ns.gang.getEquipmentType(equipment)
     detailedEquipment.cost = ns.gang.getEquipmentCost(equipment)
-    if (detailedEquipment.type === "Augmentation") {
+    if (detailedEquipment.type === 'Augmentation') {
       detailedAugmentations.push(detailedEquipment)
     } else {
       detailedEquipments.push(detailedEquipment)
@@ -37,12 +37,12 @@ export async function main (ns) {
     const hackEquip = detailedEquipments.filter(e => e?.hack > 0)
     const chaEquip = detailedEquipments.filter(e => e?.cha > 0)
     const filteredDetailedEquipments = [...hackEquip, ...chaEquip]
-    const uniqueFilteredDetailedEquipments = [...new Map(filteredDetailedEquipments.map(e => [e["name"], e])).values()]
+    const uniqueFilteredDetailedEquipments = [...new Map(filteredDetailedEquipments.map(e => [e.name, e])).values()]
     detailedEquipments = uniqueFilteredDetailedEquipments
     const hackAugs = detailedAugmentations.filter(e => e?.hack > 0)
     const chaAugs = detailedAugmentations.filter(e => e?.cha > 0)
     const filteredDetailedAugmentations = [...hackAugs, ...chaAugs]
-    const uniqueFilteredDetailedAugmentations = [...new Map(filteredDetailedAugmentations.map(e => [e["name"], e])).values()]
+    const uniqueFilteredDetailedAugmentations = [...new Map(filteredDetailedAugmentations.map(e => [e.name, e])).values()]
     detailedAugmentations = uniqueFilteredDetailedAugmentations
   } else {
     const agiEquip = detailedEquipments.filter(e => e?.agi > 0)
@@ -51,7 +51,7 @@ export async function main (ns) {
     const strEquip = detailedEquipments.filter(e => e?.str > 0)
     const chaEquip = detailedEquipments.filter(e => e?.cha > 0)
     const filteredDetailedEquipments = [...agiEquip, ...defEquip, ...dexEquip, ...strEquip, ...chaEquip]
-    const uniqueFilteredDetailedEquipments = [...new Map(filteredDetailedEquipments.map(e => [e["name"], e])).values()]
+    const uniqueFilteredDetailedEquipments = [...new Map(filteredDetailedEquipments.map(e => [e.name, e])).values()]
     detailedEquipments = uniqueFilteredDetailedEquipments
     const agiAugs = detailedAugmentations.filter(e => e?.agi > 0)
     const defAugs = detailedAugmentations.filter(e => e?.def > 0)
@@ -59,12 +59,12 @@ export async function main (ns) {
     const strAugs = detailedAugmentations.filter(e => e?.str > 0)
     const chaAugs = detailedAugmentations.filter(e => e?.cha > 0)
     const filteredDetailedAugmentations = [...agiAugs, ...defAugs, ...dexAugs, ...strAugs, ...chaAugs]
-    const uniqueFilteredDetailedAugmentations = [...new Map(filteredDetailedAugmentations.map(e => [e["name"], e])).values()]
+    const uniqueFilteredDetailedAugmentations = [...new Map(filteredDetailedAugmentations.map(e => [e.name, e])).values()]
     detailedAugmentations = uniqueFilteredDetailedAugmentations
   }
   detailedEquipments = detailedEquipments.sort((a, b) => a.cost - b.cost)
   detailedAugmentations = detailedAugmentations.sort((a, b) => a.cost - b.cost)
-  
+
   if (ns.gang.canRecruitMember()) {
     const newMemberName = `mem${members.length + 1}`
     ns.gang.recruitMember(newMemberName)

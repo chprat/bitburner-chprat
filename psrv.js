@@ -17,12 +17,20 @@ export async function main (ns) {
     if (ns.getPurchasedServerCost(ramSize) < ns.getPlayer().money) {
       for (const server of servers) {
         if (ns.getServerMaxRam(server) < ramSize) {
+          const killedAllScripts = ns.killall(server)
+          if (killedAllScripts) {
+            ns.print(`Killed all scripts on server ${server}`)
+          }
           const wasDeleted = ns.deleteServer(server)
           if (wasDeleted) {
             ns.print(`Removed server ${server}`)
           }
           const name = ns.purchaseServer('psrv', ramSize)
-          ns.print(`Bought server ${name} with ${ns.nFormat((ramSize) * 1000 * 1000 * 1000, '0b')} RAM for ${ns.nFormat(ns.getPurchasedServerCost(ramSize), '$0.000a')}`)
+          if (name === '') {
+            ns.print("Couldn't buy a new server!")
+          } else {
+            ns.print(`Bought server ${name} with ${ns.nFormat((ramSize) * 1000 * 1000 * 1000, '0b')} RAM for ${ns.nFormat(ns.getPurchasedServerCost(ramSize), '$0.000a')}`)
+          }
           break
         }
       }

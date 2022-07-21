@@ -1,21 +1,4 @@
-function recursiveScan (ns, parent, server, target, route) {
-  const children = ns.scan(server)
-  for (const child of children) {
-    if (parent === child) {
-      continue
-    }
-    if (child === target) {
-      route.unshift(child)
-      route.unshift(server)
-      return true
-    }
-    if (recursiveScan(ns, server, child, target, route)) {
-      route.unshift(server)
-      return true
-    }
-  }
-  return false
-}
+import { recursiveScan } from 'imports/recursiveScan.js'
 
 /** @param {NS} ns **/
 export async function main (ns) {

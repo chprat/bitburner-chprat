@@ -41,11 +41,12 @@ export async function onHome (ns) {
     { name: 'deployer.js', threads: 1, mem: 0 },
     { name: 'solver.js', threads: 0, mem: 0 },
     { name: 'trader.js', threads: 0, mem: 0 },
+    { name: 'corp.js', threads: 0, mem: 0 },
     { name: 'gang.js', threads: 1, mem: 0 },
     { name: 'hacknet.js', threads: 1, mem: 0 },
     { name: 'psrv.js', threads: 1, mem: 0 }
   ]
-  const optionalScripts = ['solver.js', 'trader.js']
+  const optionalScripts = ['solver.js', 'trader.js', 'corp.js']
   const waitForScripts = ['gang.js', 'hacknet.js', 'psrv.js']
   for (const script of scripts) {
     script.mem = ns.getScriptRam(script.name)
@@ -85,7 +86,7 @@ export async function onHome (ns) {
       }
     }
     if (script.name === 'hacker.js') {
-      const activeHackThreads = ns.getRunningScript('hacker.js') === undefined ? ns.getRunningScript('hacker.js').threads : 0
+      const activeHackThreads = ns.getRunningScript('hacker.js') !== undefined ? ns.getRunningScript('hacker.js').threads : 0
       if (activeHackThreads !== script.threads) {
         ns.kill(script.name, 'home')
         const pid = ns.run(script.name, script.threads)

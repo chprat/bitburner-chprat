@@ -35,14 +35,17 @@ export async function runAndWait (ns, script, server) {
 }
 
 export async function onHome (ns) {
-  const scripts = [{ name: 'rooter.js', threads: 1, mem: 0 },
+  const scripts = [
+    { name: 'rooter.js', threads: 1, mem: 0 },
+    { name: 'hacker.js', threads: 0, mem: 0 },
     { name: 'deployer.js', threads: 1, mem: 0 },
+    { name: 'solver.js', threads: 0, mem: 0 },
+    { name: 'trader.js', threads: 0, mem: 0 },
     { name: 'gang.js', threads: 1, mem: 0 },
     { name: 'hacknet.js', threads: 1, mem: 0 },
-    { name: 'psrv.js', threads: 1, mem: 0 },
-    { name: 'solver.js', threads: 0, mem: 0 },
-    { name: 'hacker.js', threads: 0, mem: 0 },
-    { name: 'trader.js', threads: 0, mem: 0 }]
+    { name: 'psrv.js', threads: 1, mem: 0 }
+  ]
+  const optionalScripts = ['solver.js', 'trader.js']
   const waitForScripts = ['gang.js', 'hacknet.js', 'psrv.js']
   for (const script of scripts) {
     script.mem = ns.getScriptRam(script.name)
@@ -58,15 +61,12 @@ export async function onHome (ns) {
   scriptRAM += scripts.find(e => e.name === 'deployer.js').mem
   scriptRAM += maxWaitForScriptsRAM
   let freeRAM = homeRAM - scriptRAM
-  if (freeRAM > scripts.find(e => e.name === 'solver.js').mem) {
-    scripts.find(e => e.name === 'solver.js').threads = 1
-    scriptRAM += scripts.find(e => e.name === 'solver.js').mem
-    freeRAM = homeRAM - scriptRAM
-  }
-  if (freeRAM > scripts.find(e => e.name === 'trader.js').mem) {
-    scripts.find(e => e.name === 'trader.js').threads = 1
-    scriptRAM += scripts.find(e => e.name === 'trader.js').mem
-    freeRAM = homeRAM - scriptRAM
+  for (const optionalScript of optionalScripts) {
+    if (freeRAM > scripts.find(e => e.name === optionalScript).mem) {
+      scripts.find(e => e.name === optionalScript).threads = 1
+      scriptRAM += scripts.find(e => e.name === optionalScript).mem
+      freeRAM = homeRAM - scriptRAM
+    }
   }
   const hackThreads = Math.floor(freeRAM / scripts.find(e => e.name === 'hacker.js').mem) - 1
   scripts.find(e => e.name === 'hacker.js').threads = (hackThreads > 1) ? hackThreads : 1

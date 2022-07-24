@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -d node_modules ]; then
-    docker run -it --rm -v $(pwd):/data --entrypoint="" cytopia/eslint /bin/sh -c "apk add npm && npm install"
+    docker run --rm -v $(pwd):/code pipelinecomponents/eslint npm install
 fi
 
 args=""
@@ -13,5 +13,5 @@ do
     esac
 done
 
-docker run -it --rm -v $(pwd):/data cytopia/eslint . $args
+docker run --rm -v $(pwd):/code pipelinecomponents/eslint eslint . --color $args
 

@@ -2,8 +2,8 @@ export function hammingEncode (value) {
   function HammingSumOfParity (lengthOfDBits) {
     return lengthOfDBits < 3 || lengthOfDBits === 0
       ? lengthOfDBits === 0
-          ? 0
-          : lengthOfDBits + 1
+        ? 0
+        : lengthOfDBits + 1
       : Math.ceil(Math.log2(lengthOfDBits * 2)) <=
                 Math.ceil(Math.log2(1 + lengthOfDBits + Math.ceil(Math.log2(lengthOfDBits))))
         ? Math.ceil(Math.log2(lengthOfDBits) + 1)

@@ -1,6 +1,7 @@
 /** @param {NS} ns **/
 export async function main (ns) {
   ns.disableLog('purchaseServer')
+  ns.disableLog('getServerMaxRam')
   const serverLimit = ns.getPurchasedServerLimit()
   const servers = ns.getPurchasedServers()
   ns.print(`${servers.length}/${serverLimit} servers owned`)
@@ -14,6 +15,13 @@ export async function main (ns) {
     }
   } else {
     const ramSize = ns.getPurchasedServerMaxRam()
+    let fullRAMServers = 0
+    for (const server of servers) {
+      if (ns.getServerMaxRam(server) === ramSize) {
+        fullRAMServers += 1
+      }
+    }
+    ns.print(`${fullRAMServers}/${serverLimit} servers with full RAM capacity owned`)
     if (ns.getPurchasedServerCost(ramSize) < ns.getPlayer().money) {
       for (const server of servers) {
         if (ns.getServerMaxRam(server) < ramSize) {

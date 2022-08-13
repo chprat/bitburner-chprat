@@ -46,10 +46,11 @@ export async function onHome (ns) {
     { name: 'hacknet.js', threads: 1, mem: 0 },
     { name: 'psrv.js', threads: 1, mem: 0 },
     { name: 'upgrader.js', threads: 1, mem: 0 },
-    { name: 'worker.js', threads: 1, mem: 0 }
+    { name: 'worker.js', threads: 1, mem: 0 },
+    { name: 'backdoorer.js', threads: 1, mem: 0 }
   ]
   const optionalScripts = ['solver.js', 'trader.js', 'corp.js']
-  const waitForScripts = ['gang.js', 'hacknet.js', 'psrv.js', 'upgrader.js', 'worker.js']
+  const waitForScripts = ['gang.js', 'hacknet.js', 'psrv.js', 'upgrader.js', 'worker.js', 'backdoorer.js']
   for (const script of scripts) {
     script.mem = ns.getScriptRam(script.name)
   }

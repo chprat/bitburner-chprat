@@ -1,4 +1,4 @@
-import { missingAugs } from 'imports/augmentationHelpers.js'
+import { missingAugs, hasMissingAugs } from 'imports/augmentationHelpers.js'
 
 export const HackingFactions = [
   { name: 'CyberSec', server: 'CSEC' },
@@ -61,4 +61,29 @@ export function getFactionsSortedByMissingRep (ns, ascending = true, necessary =
     factions = factions.sort((a, b) => b.missingRep - a.missingRep)
   }
   return factions
+}
+
+export function getAllFactions (ns) {
+  const allFactions = EarlyFactions.concat(amFactions, asFactions, eFactions, CriminalFactions, EndGameFactions)
+  for (const faction of HackingFactions) {
+    allFactions.push(faction.name)
+  }
+  for (const faction of MegaCorpFactions) {
+    if (faction.name === 'Fulcrum Technologies') {
+      allFactions.push('Fulcrum Secret Technologies')
+    } else {
+      allFactions.push(faction.name)
+    }
+  }
+  return allFactions
+}
+
+export function getAllFactionsWithMissingAugs (ns, necessary = true) {
+  const allFactionsWithMissingAugs = []
+  for (const faction of getAllFactions(ns)) {
+    if (hasMissingAugs(ns, faction, necessary)) {
+      allFactionsWithMissingAugs.push(faction)
+    }
+  }
+  return allFactionsWithMissingAugs
 }

@@ -27,11 +27,14 @@ export function augIsNecessary (ns, aug) {
     'CashRoot Starter Kit',
     'The Red Pill'
   ]
-  for (const key in ns.singularity.getAugmentationStats(aug)) {
+  const stats = ns.singularity.getAugmentationStats(aug)
+  for (const key in stats) {
     for (const feature of necessaryFeatures) {
       if (key.includes(feature)) {
-        necessary = true
-        break
+        if (stats[key] > 1) {
+          necessary = true
+          break
+        }
       }
     }
     if (necessary === true) {
@@ -56,7 +59,8 @@ export function getAllMissingAugs (ns, factions) {
         const augmentation = { name: '', factions: [], stats: [], necessary: false }
         augmentation.name = aug
         augmentation.factions = [faction]
-        augmentation.stats = Object.keys(ns.singularity.getAugmentationStats(aug))
+        const stats = ns.singularity.getAugmentationStats(aug)
+        augmentation.stats = Object.keys(stats).filter(e => stats[e] > 1)
         augmentation.necessary = augIsNecessary(ns, aug)
         missingAugs.push(augmentation)
       } else {

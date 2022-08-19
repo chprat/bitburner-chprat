@@ -8,6 +8,7 @@ import { proper2ColoringOfAGraph } from 'imports/proper2ColoringOfAGraph.js'
 import { rleCompress } from 'imports/rleCompress.js'
 import { lzDecompress } from 'imports/lzDecompress.js'
 import { lzCompress } from 'imports/lzCompress.js'
+import { caesar } from 'imports/caesar.js'
 
 function solve (type, data, server, contract, ns) {
   let solution = '~'
@@ -86,6 +87,9 @@ function solve (type, data, server, contract, ns) {
       break
     case 'Compression III: LZ Compression':
       solution = lzCompress(data)
+      break
+    case 'Encryption I: Caesar Cipher':
+      solution = caesar(data)
       break
     default:
       ns.print(`New type on ${server}: ${contract} is of type ${type}`)

@@ -78,7 +78,7 @@ export async function main (ns) {
   function buyStock (stock) {
     const stockPrice = ns.stock.getAskPrice(stock) // Get the stockprice
     const shares = stockBuyQuantCalc(stockPrice, stock) // calculate the shares to buy using stockBuyQuantCalc
-    ns.stock.buy(stock, shares)
+    ns.stock.buyStock(stock, shares)
     if (shares > 0) { ns.print('Bought: ' + stock + ', quant: ' + Math.round(shares) + ' @ $' + Math.round(stockPrice)) }
     portfolio.push({ sym: stock, value: stockPrice, shares: shares }) // store the purchase info in portfolio
   }
@@ -89,7 +89,7 @@ export async function main (ns) {
     const i = portfolio.findIndex(obj => obj.sym === stock) // Find the stock info in the portfolio
     ns.print('SOLD: ' + stock + ', quant: ' + Math.round(portfolio[i].shares) + ' @ $' + Math.round(stockPrice) + ' - bought at $' + Math.round(portfolio[i].value))
     portfolio.splice(i, 1) // Remove the stock from portfolio
-    ns.stock.sell(stock, position[0])
+    ns.stock.sellStock(stock, position[0])
   }
 
   function stockBuyQuantCalc (stockPrice, stock) { // Calculates how many shares to buy

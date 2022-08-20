@@ -17,7 +17,7 @@ function doFactionWork (ns) {
       continue
     }
     let success = false
-    const doFieldWork = ns.getPlayer().charisma < 250
+    const doFieldWork = ns.getPlayer().skills.charisma < 250
     if (doFieldWork) {
       success = ns.singularity.workForFaction(faction.name, 'Field Work', focus)
     }
@@ -38,7 +38,7 @@ function doCompanyWork (ns) {
   ns.print('Check if we need to do company work')
   let success = false
   let job = 'IT'
-  if (ns.getPlayer().charisma >= 250) {
+  if (ns.getPlayer().skills.charisma >= 250) {
     job = 'Business'
   }
   ns.singularity.stopAction()

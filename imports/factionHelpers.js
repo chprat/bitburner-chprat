@@ -12,15 +12,15 @@ export const CriminalFactions = ['Slum Snakes', 'Tetrads', 'Silhouette', 'Speake
 export const EndGameFactions = ['The Covenant', 'Daedalus', 'Illuminati']
 
 export const MegaCorpFactions = [
-  { name: 'MegaCorp', server: '' },
-  { name: 'Blade Industries', server: '' },
-  { name: 'Four Sigma', server: '' },
-  { name: 'KuaiGong International', server: '' },
-  { name: 'NWO', server: '' },
-  { name: 'OmniTek Incorporated', server: '' },
-  { name: 'ECorp', server: '' },
-  { name: 'Bachman & Associates', server: '' },
-  { name: 'Clarke Incorporated', server: '' },
+  { name: 'MegaCorp', server: 'megacorp' },
+  { name: 'Blade Industries', server: 'blade' },
+  { name: 'Four Sigma', server: '4sigma' },
+  { name: 'KuaiGong International', server: 'kuai-gong' },
+  { name: 'NWO', server: 'nwo' },
+  { name: 'OmniTek Incorporated', server: 'omnitek' },
+  { name: 'ECorp', server: 'ecorp' },
+  { name: 'Bachman & Associates', server: 'b-and-a' },
+  { name: 'Clarke Incorporated', server: 'clarkinc' },
   { name: 'Fulcrum Technologies', server: 'fulcrumassets' }
 ]
 

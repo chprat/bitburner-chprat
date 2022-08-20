@@ -9,7 +9,7 @@ export async function files (ns, server) {
     .filter(f => !ownedFiles.includes(f))
   for (const file of files) {
     try {
-      await ns.scp(file, server, 'home')
+      await ns.scp(file, 'home', server)
       ns.tprint(`Copied ${file} from ${server}`)
     } catch (err) {
       ns.tprint(`Skipped file ${file} from ${server}`)

@@ -21,7 +21,8 @@ export function augIsNecessary (ns, aug) {
     'hacking',
     'charisma',
     'company',
-    'faction'
+    'faction',
+    'hacknet'
   ]
   const necessaryAugs = [
     'CashRoot Starter Kit',

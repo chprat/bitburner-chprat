@@ -5,7 +5,6 @@ let focus = true
 
 function doFactionWork (ns) {
   ns.print('Check if we need to do faction work')
-  ns.singularity.stopAction()
   const factions = getFactionsSortedByMissingRep(ns)
   for (const faction of factions) {
     if (!hasMissingAugs(ns, faction.name)) {
@@ -14,6 +13,11 @@ function doFactionWork (ns) {
     }
     if (faction.missingRep <= 0) {
       ns.print(`We don't need more reputation for ${faction.name}`)
+      const currentWork = ns.singularity.getCurrentWork()
+      if (ns.singularity.isBusy() && currentWork.type === 'FACTION' && currentWork.factionName === faction.name) {
+        ns.print(`Stop working for ${faction.name}`)
+        ns.singularity.stopAction()
+      }
       continue
     }
     let success = false
@@ -24,6 +28,10 @@ function doFactionWork (ns) {
     if (!success) {
       if (doFieldWork) {
         ns.print(`${faction.name} doesn't offer Field Work, trying Hacking Contracts`)
+      }
+      const currentWork = ns.singularity.getCurrentWork()
+      if (ns.singularity.isBusy() && currentWork.type === 'COMPANY' && currentWork.factionName === faction.name) {
+        return
       }
       success = ns.singularity.workForFaction(faction.name, 'Hacking Contracts', focus)
       if (!success) {
@@ -41,7 +49,6 @@ function doCompanyWork (ns) {
   if (ns.getPlayer().skills.charisma >= 250) {
     job = 'Business'
   }
-  ns.singularity.stopAction()
   for (const company of getCompanies(ns)) {
     if (company === 'Fulcrum Technologies') {
       if (!ns.getServer('fulcrumassets').backdoorInstalled) {
@@ -66,6 +73,10 @@ function doCompanyWork (ns) {
         if (success) {
           ns.print(`Got promoted to ${ns.getPlayer().jobs[company]} at ${company}`)
         }
+      }
+      const currentWork = ns.singularity.getCurrentWork()
+      if (ns.singularity.isBusy() && currentWork.type === 'COMPANY' && currentWork.companyName === company) {
+        return
       }
       success = ns.singularity.workForCompany(company, focus)
       if (!success) {
@@ -92,7 +103,6 @@ function buyOrCreateProgram (ns) {
   programs.find(e => e.name === 'HTTPWorm.exe').exists = ns.fileExists('HTTPWorm.exe', 'home')
   programs.find(e => e.name === 'SQLInject.exe').exists = ns.fileExists('SQLInject.exe', 'home')
   const hasTor = ns.singularity.purchaseTor()
-  ns.singularity.stopAction()
   for (const program of programs) {
     if (program.exists) {
       continue
@@ -116,6 +126,10 @@ function buyOrCreateProgram (ns) {
         ns.print(`${program.name} is to expensive`)
       }
     }
+    const currentWork = ns.singularity.getCurrentWork()
+    if (ns.singularity.isBusy() && currentWork.type === 'CREATE_PROGRAM' && currentWork.programName === program.name) {
+      return
+    }
     const success = ns.singularity.createProgram(program.name, focus)
     if (!success) {
       ns.print(`Couldn't start working on ${program.name}`)
@@ -130,15 +144,24 @@ function buyOrCreateProgram (ns) {
 export async function main (ns) {
   focus = !ns.singularity.getOwnedAugmentations().includes('Neuroreceptor Management Implant')
   buyOrCreateProgram(ns)
-  if (ns.singularity.isBusy()) {
+  if (ns.singularity.isBusy() && ns.singularity.getCurrentWork().type === 'CREATE_PROGRAM') {
+    ns.print('Busy with creating a program')
     return
   }
+  // when we're not in a faction we probably also do not have the hacking/charisma skills
+  // to work for a company so we can quit early
   if (ns.getPlayer().factions.length === 0) {
+    ns.print('Not joined a faction, nothing to do')
     return
   }
   doFactionWork(ns)
-  if (ns.singularity.isBusy()) {
-    return
+  if (ns.singularity.isBusy() && ns.singularity.getCurrentWork().type === 'FACTION') {
+    if (!hasMissingAugs(ns, ns.singularity.getCurrentWork().factionName)) {
+      ns.singularity.stopAction()
+    } else {
+      ns.print('Busy with faction work')
+      return
+    }
   }
   doCompanyWork(ns)
 }

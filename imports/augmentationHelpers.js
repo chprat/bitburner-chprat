@@ -26,7 +26,8 @@ export function augIsNecessary (ns, aug) {
   ]
   const necessaryAugs = [
     'CashRoot Starter Kit',
-    'The Red Pill'
+    'The Red Pill',
+    'Neuroreceptor Management Implant'
   ]
   const stats = ns.singularity.getAugmentationStats(aug)
   for (const key in stats) {

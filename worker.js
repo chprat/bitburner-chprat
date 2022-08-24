@@ -1,5 +1,5 @@
 import { getFactionsSortedByMissingRep, getCompanies, joinedFaction } from 'imports/factionHelpers.js'
-import { hasMissingAugs, isAugInstalled } from 'imports/augmentationHelpers.js'
+import { hasMissingAugs } from 'imports/augmentationHelpers.js'
 
 let focus = true
 
@@ -106,11 +106,6 @@ function buyOrCreateProgram (ns) {
   for (const program of programs) {
     if (program.exists) {
       continue
-    }
-    if (program.name === 'SQLInject.exe') {
-      if (!isAugInstalled(ns, 'The Red Pill')) {
-        continue
-      }
     }
     if (hasTor) {
       const canAfford = ns.singularity.getDarkwebProgramCost(program.name) <= ns.getPlayer().money

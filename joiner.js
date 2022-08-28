@@ -1,21 +1,21 @@
-import { HackingFactions, EarlyFactions, CriminalFactions, EndGameFactions, MegaCorpFactions, amFactions, asFactions, eFactions, joinedFaction } from 'imports/factionHelpers.js'
+import { HackingFactions, EarlyFactions, CriminalFactions, EndGameFactions, MegaCorpFactions, amFactions, asFactions, eFactions, joinedFaction, getAllFactionsWithMissingAugs } from 'imports/factionHelpers.js'
 import { hasMissingAugs } from 'imports/augmentationHelpers.js'
 
-function progressCityFactions (ns) {
+function progressCityFactions (ns, necessary = true) {
   let workOnAm = false
   let workOnAs = false
   let workOnE = false
   for (const faction of amFactions) {
     workOnAm ||= joinedFaction(ns, faction)
-    workOnAm ||= hasMissingAugs(ns, faction)
+    workOnAm ||= hasMissingAugs(ns, faction, necessary)
   }
   for (const faction of asFactions) {
     workOnAs ||= joinedFaction(ns, faction)
-    workOnAs ||= hasMissingAugs(ns, faction)
+    workOnAs ||= hasMissingAugs(ns, faction, necessary)
   }
   for (const faction of eFactions) {
     workOnE ||= joinedFaction(ns, faction)
-    workOnE ||= hasMissingAugs(ns, faction)
+    workOnE ||= hasMissingAugs(ns, faction, necessary)
   }
   if (workOnAm === true) {
     ns.print(`Focus on working for ${amFactions}`)
@@ -55,9 +55,9 @@ function joinFactions (ns, factions) {
   return success
 }
 
-async function joinCityFactions (ns) {
+async function joinCityFactions (ns, necessary = true) {
   ns.print('Check if we need to join a city faction')
-  const factionsToProgress = progressCityFactions(ns)
+  const factionsToProgress = progressCityFactions(ns, necessary)
   if (factionsToProgress.length === 0) {
     return
   }
@@ -125,6 +125,39 @@ async function joinTianDiHui (ns, necessary = true) {
   await cityBasedJoining(ns, faction, city, necessary)
 }
 
+async function joinTetrads (ns, necessary = true) {
+  const faction = 'Tetrads'
+  const city = 'Ishima'
+  ns.print(`Check if we need to join ${faction}`)
+  if (ns.heart.break() > -18) {
+    return
+  }
+  await cityBasedJoining(ns, faction, city, necessary)
+}
+
+async function joinTheDarkArmy (ns, necessary = true) {
+  const faction = 'The Dark Army'
+  const city = 'Chongqing'
+  ns.print(`Check if we need to join ${faction}`)
+  if (ns.heart.break() > -45) {
+    return
+  }
+  if (ns.getPlayer().numPeopleKilled < 5) {
+    return
+  }
+  await cityBasedJoining(ns, faction, city, necessary)
+}
+
+async function joinTheSyndicate (ns, necessary = true) {
+  const faction = 'The Syndicate'
+  const city = 'Aevum'
+  ns.print(`Check if we need to join ${faction}`)
+  if (ns.heart.break() > -90) {
+    return
+  }
+  await cityBasedJoining(ns, faction, city, necessary)
+}
+
 /** @param {NS} ns **/
 export async function main (ns) {
   for (const factions of [EarlyFactions, HackingFactions, CriminalFactions, EndGameFactions, MegaCorpFactions]) {
@@ -132,4 +165,19 @@ export async function main (ns) {
   }
   await joinCityFactions(ns)
   await joinTianDiHui(ns)
+  let factionsWithMissingAugs = getAllFactionsWithMissingAugs(ns)
+  const factions = CriminalFactions.concat(EndGameFactions.filter(e => e !== 'Daedalus'))
+  for (const faction of factions) {
+    factionsWithMissingAugs = factionsWithMissingAugs.filter(e => e !== faction)
+  }
+  if (factionsWithMissingAugs.length === 0) {
+    for (const factions of [EarlyFactions, HackingFactions, CriminalFactions, EndGameFactions, MegaCorpFactions]) {
+      joinFactions(ns, factions, false)
+    }
+    await joinCityFactions(ns, false)
+    await joinTianDiHui(ns, false)
+    await joinTetrads(ns, false)
+    await joinTheDarkArmy(ns, false)
+    await joinTheSyndicate(ns, false)
+  }
 }

@@ -135,6 +135,19 @@ function buyOrCreateProgram (ns) {
   }
 }
 
+async function killAndKarma (ns) {
+  ns.print('Check if we need to commit some crimes')
+  while (ns.getPlayer().numPeopleKilled < 30) {
+    ns.singularity.commitCrime('Homicide', focus)
+    await ns.sleep(10000)
+  }
+  while (ns.heart.break() > -90) {
+    ns.singularity.commitCrime('Homicide', focus)
+    await ns.sleep(10000)
+  }
+  ns.singularity.stopAction()
+}
+
 /** @param {NS} ns **/
 export async function main (ns) {
   focus = !ns.singularity.getOwnedAugmentations().includes('Neuroreceptor Management Implant')
@@ -159,4 +172,9 @@ export async function main (ns) {
     }
   }
   doCompanyWork(ns)
+  if (ns.singularity.isBusy() && ns.singularity.getCurrentWork().type === 'COMPANY') {
+    ns.print('Busy with company work')
+    return
+  }
+  await killAndKarma(ns)
 }

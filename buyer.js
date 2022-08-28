@@ -1,23 +1,23 @@
-import { joinedFaction, getFactionsSortedByMissingRep } from 'imports/factionHelpers.js'
+import { joinedFaction, getFactionsSortedByMissingRep, getAllFactionsWithMissingAugs, CriminalFactions, EndGameFactions } from 'imports/factionHelpers.js'
 import { augIsNecessary, hasMissingAugs, missingAugs, isAugInstalled } from 'imports/augmentationHelpers.js'
 
-function buyAugmentations (ns) {
+function buyAugmentations (ns, necessary = true) {
   let openAugmentations = []
-  let factions = getFactionsSortedByMissingRep(ns)
+  let factions = getFactionsSortedByMissingRep(ns, true, necessary)
   const focusFactions = ['Netburners', 'CyberSec', 'Tian Di Hui', 'Sector-12', 'Aevum', 'NiteSec', 'The Black Hand', 'BitRunners']
   for (const faction of focusFactions) {
-    if (hasMissingAugs(ns, faction) && joinedFaction(ns, faction)) {
+    if (hasMissingAugs(ns, faction, necessary) && joinedFaction(ns, faction)) {
       ns.print(`Focus on augments from ${faction}`)
       factions = factions.filter(e => e.name === faction)
       break
     }
   }
   for (const faction of factions) {
-    if (!hasMissingAugs(ns, faction.name)) {
+    if (!hasMissingAugs(ns, faction.name, necessary)) {
       ns.print(`We don't need any augmentations from ${faction.name}`)
       continue
     }
-    for (const augmentation of missingAugs(ns, faction.name)) {
+    for (const augmentation of missingAugs(ns, faction.name, necessary)) {
       const aug = { name: '', cost: '', rep: '', preReqs: '', faction: '' }
       aug.name = augmentation
       aug.cost = ns.singularity.getAugmentationPrice(augmentation)
@@ -36,8 +36,10 @@ function buyAugmentations (ns) {
   }
   openAugmentations = openAugmentations.sort((a, b) => b.cost - a.cost)
   for (const openAugmentation of openAugmentations) {
-    if (!augIsNecessary(ns, openAugmentation.name)) {
-      continue
+    if (necessary) {
+      if (!augIsNecessary(ns, openAugmentation.name)) {
+        continue
+      }
     }
     const hasMoney = ns.getPlayer().money >= openAugmentation.cost
     const hasRep = ns.singularity.getFactionRep(openAugmentation.faction) >= openAugmentation.rep
@@ -80,4 +82,12 @@ export async function main (ns) {
     }
   }
   buyAugmentations(ns)
+  let factionsWithMissingAugs = getAllFactionsWithMissingAugs(ns)
+  const factions = CriminalFactions.concat(EndGameFactions.filter(e => e !== 'Daedalus'))
+  for (const faction of factions) {
+    factionsWithMissingAugs = factionsWithMissingAugs.filter(e => e !== faction)
+  }
+  if (factionsWithMissingAugs.length === 0) {
+    buyAugmentations(ns, false)
+  }
 }

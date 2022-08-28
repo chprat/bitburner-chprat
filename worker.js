@@ -3,11 +3,11 @@ import { hasMissingAugs } from 'imports/augmentationHelpers.js'
 
 let focus = true
 
-function doFactionWork (ns) {
+function doFactionWork (ns, necessary = true) {
   ns.print('Check if we need to do faction work')
-  const factions = getFactionsSortedByMissingRep(ns)
+  const factions = getFactionsSortedByMissingRep(ns, true, necessary)
   for (const faction of factions) {
-    if (!hasMissingAugs(ns, faction.name)) {
+    if (!hasMissingAugs(ns, faction.name, necessary)) {
       ns.print(`We don't need any augmentations from ${faction.name}`)
       continue
     }
@@ -177,4 +177,10 @@ export async function main (ns) {
     return
   }
   await killAndKarma(ns)
+  doFactionWork(ns, false)
+  if (ns.singularity.isBusy() && ns.singularity.getCurrentWork().type === 'FACTION') {
+    if (!hasMissingAugs(ns, ns.singularity.getCurrentWork().factionName, false)) {
+      ns.singularity.stopAction()
+    }
+  }
 }

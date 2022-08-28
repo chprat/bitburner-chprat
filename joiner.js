@@ -86,11 +86,9 @@ async function joinCityFactions (ns) {
   }
 }
 
-async function joinTianDiHui (ns) {
-  ns.print('Check if we need to join Tian Di Hui')
-  const faction = 'Tian Di Hui'
-  const factionsToProgress = progressCityFactions(ns)
-  if (!hasMissingAugs(ns, faction)) {
+async function cityBasedJoining (ns, faction, city, necessary = true) {
+  const factionsToProgress = progressCityFactions(ns, necessary)
+  if (!hasMissingAugs(ns, faction, necessary)) {
     ns.print(`We don't need any augmentations from ${faction}`)
     return
   }
@@ -103,13 +101,13 @@ async function joinTianDiHui (ns) {
     allCityFactionsJoined ||= joinedFaction(ns, fac)
   }
   if (allCityFactionsJoined) {
-    if (ns.getPlayer.city !== 'Ishima') {
-      const success = ns.singularity.travelToCity('Ishima')
+    if (ns.getPlayer.city !== city) {
+      const success = ns.singularity.travelToCity(city)
       if (success) {
-        ns.print('Traveled to Ishima')
+        ns.print(`Traveled to ${city}`)
         await ns.sleep(30000)
       } else {
-        ns.print("Couldn't travel to Ishima")
+        ns.print(`Couldn't travel to ${city}`)
         return
       }
     }
@@ -118,6 +116,13 @@ async function joinTianDiHui (ns) {
       ns.print(`Couldn't join ${faction}`)
     }
   }
+}
+
+async function joinTianDiHui (ns, necessary = true) {
+  const faction = 'Tian Di Hui'
+  const city = 'Ishima'
+  ns.print(`Check if we need to join ${faction}`)
+  await cityBasedJoining(ns, faction, city, necessary)
 }
 
 /** @param {NS} ns **/

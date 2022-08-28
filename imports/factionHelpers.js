@@ -87,3 +87,17 @@ export function getAllFactionsWithMissingAugs (ns, necessary = true) {
   }
   return allFactionsWithMissingAugs
 }
+
+export function getFactionWithMostRep (ns) {
+  const factions = ns.getPlayer().factions
+  let fac = ''
+  let rep = 0
+  for (const faction of factions) {
+    const curRep = ns.singularity.getFactionRep(faction)
+    if (rep < curRep) {
+      rep = curRep
+      fac = faction
+    }
+  }
+  return fac
+}

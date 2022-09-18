@@ -82,9 +82,26 @@ async function smallTownAchievement (ns) {
   }
 }
 
+function getFreeProductName (ns, division) {
+  for (let i = 0; i < division.products.length + 1; i++) {
+    const prodName = division.name.concat((i + 1).toString())
+    try {
+      ns.corporation.getProduct(division.name, prodName)
+    } catch (err) {
+      return prodName
+    }
+  }
+}
+
 async function developNewProduct (ns, division, productName) {
   ns.print(`Develop new product ${productName} in ${division.name}`)
-  ns.corporation.makeProduct(division.name, mainCity, productName, designInvest, marketingInvest)
+  try {
+    ns.corporation.makeProduct(division.name, mainCity, productName, designInvest, marketingInvest)
+  } catch (err) {
+    const newProductName = getFreeProductName(ns, division)
+    ns.print(`${productName} in ${division.name} already exists, retry ${newProductName}`)
+    await developNewProduct(ns, division, newProductName)
+  }
   if (ns.corporation.hasResearched(division.name, researchNames.dash)) {
     await sleepOneCycle(ns)
     ns.print(`Sell ${productName} in ${division.name}`)

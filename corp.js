@@ -186,22 +186,6 @@ async function setProductSales (ns, division) {
   }
 }
 
-function buyUpgrades (ns) {
-  const oneTimeUpgrades = ['Smart Supply', 'Warehouse API', 'Office API']
-  for (const oneTimeUpgrade of oneTimeUpgrades) {
-    if (!ns.corporation.hasUnlockUpgrade(oneTimeUpgrade)) {
-      if (ns.corporation.getCorporation().funds > ns.corporation.getUnlockUpgradeCost(oneTimeUpgrade)) {
-        ns.corporation.unlockUpgrade(oneTimeUpgrade)
-        ns.print(`Bought ${oneTimeUpgrade}!`)
-      } else {
-        ns.print(`Not enough funds to buy ${oneTimeUpgrade}!`)
-      }
-    } else {
-      ns.print(`Already bought ${oneTimeUpgrade}!`)
-    }
-  }
-}
-
 function hasAPIAccess (ns) {
   return ns.corporation.hasUnlockUpgrade('Warehouse API') & ns.corporation.hasUnlockUpgrade('Office API')
 }

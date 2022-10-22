@@ -495,7 +495,8 @@ async function buyMaterials (ns, divisionName, stage) {
 
 function checkInvestmentOffer (ns, round) {
   const offers = {
-    1: 210e9
+    1: 210e9,
+    2: 5e12
   }
   const offer = ns.corporation.getInvestmentOffer()
   if (round !== offer.round) {
@@ -564,6 +565,9 @@ async function initialSetup (ns) {
     return false
   }
   if (!await buyMaterials(ns, 'Agri', 2)) {
+    return false
+  }
+  if (!checkInvestmentOffer(ns, 2)) {
     return false
   }
   return true

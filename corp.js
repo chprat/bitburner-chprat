@@ -332,8 +332,28 @@ async function raiseDivision (ns, division) {
   }
 }
 
+function enableSmartSupply (ns) {
+  const divisions = ns.corporation.getCorporation().divisions
+  for (const division of divisions) {
+    for (const city of division.cities) {
+      if (!ns.corporation.getWarehouse(division.name, city).smartSupplyEnabled) {
+        if (ns.corporation.hasWarehouse(division.name, city)) {
+          ns.corporation.setSmartSupply(division.name, city, true)
+        } else {
+          ns.print(`${city} of ${division.name} doesn't have a warehouse, can't enable SmartSupply!`)
+          return false
+        }
+      }
+    }
+  }
+  return true
+}
+
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
+    return false
+  }
+  if (!enableSmartSupply(ns)) {
     return false
   }
   return true

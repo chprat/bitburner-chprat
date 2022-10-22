@@ -438,6 +438,45 @@ function buyFirstUpgrades (ns) {
   return true
 }
 
+async function buyMaterial (ns, divisionName, cityName, materialName, amount) {
+  const material = ns.corporation.getMaterial(divisionName, cityName, materialName)
+  const missingMat = amount - material.qty
+  if (missingMat <= 0) {
+    ns.corporation.buyMaterial(divisionName, cityName, materialName, 0)
+    return true
+  }
+  if ((material.cost * missingMat) > ns.corporation.getCorporation().funds) {
+    ns.print(`Not enough money to buy ${missingMat} of ${materialName}`)
+    return false
+  }
+  ns.corporation.buyMaterial(divisionName, cityName, materialName, missingMat / 10)
+  while (ns.corporation.getMaterial(divisionName, cityName, materialName).qty < amount) {
+    await ns.sleep(100)
+  }
+  ns.corporation.buyMaterial(divisionName, cityName, materialName, 0)
+  return true
+}
+
+async function buyMaterials (ns, divisionName, stage) {
+  const materials = {
+    1: {
+      materials: ['Hardware', 'AI Cores', 'Real Estate'],
+      Hardware: 125,
+      'AI Cores': 75,
+      'Real Estate': 27000
+    }
+  }
+  const division = ns.corporation.getDivision(divisionName)
+  for (const city of division.cities) {
+    for (const material of materials[stage].materials) {
+      if (!await buyMaterial(ns, division.name, city, material, materials[stage][material])) {
+        return false
+      }
+    }
+  }
+  return true
+}
+
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
     return false
@@ -454,6 +493,9 @@ async function initialSetup (ns) {
   }
   sellMaterials(ns, 'Agri')
   if (!buyFirstUpgrades(ns)) {
+    return false
+  }
+  if (!await buyMaterials(ns, 'Agri', 1)) {
     return false
   }
   return true

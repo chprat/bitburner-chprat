@@ -553,6 +553,9 @@ async function initialSetup (ns) {
   if (!doUpgrade(ns, 'Smart Storage', 10)) {
     return false
   }
+  if (!upgradeStorageSize(ns, 'Agri', 2000)) {
+    return false
+  }
   return true
 }
 

@@ -364,6 +364,15 @@ async function assignEmployees (ns) {
           await ns.corporation.setAutoJobAssignment(division.name, city, 'Business', 1)
         }
       }
+      if (officeData.size === 9) {
+        if (officeData.employeeJobs.Unassigned > 0) {
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Operations', 2)
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Engineer', 2)
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Business', 1)
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Management', 2)
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Research & Development', 2)
+        }
+      }
     }
   }
 }
@@ -494,6 +503,23 @@ function checkInvestmentOffer (ns, round) {
   }
 }
 
+async function upgradeOfficeSize (ns, divisionName, newSize) {
+  const division = ns.corporation.getDivision(divisionName)
+  for (const city of division.cities) {
+    const currentSize = ns.corporation.getOffice(division.name, city).size
+    if (currentSize >= newSize) {
+      continue
+    }
+    if (ns.corporation.getOfficeSizeUpgradeCost(division.name, city, newSize - currentSize) > ns.corporation.getCorporation().funds) {
+      ns.print(`Not enough money to upgrade ${city} office of ${division.name} to ${newSize}`)
+      return false
+    }
+    ns.corporation.upgradeOfficeSize(division.name, city, newSize - currentSize)
+  }
+  await assignEmployees(ns)
+  return true
+}
+
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
     return false
@@ -516,6 +542,9 @@ async function initialSetup (ns) {
     return false
   }
   if (!checkInvestmentOffer(ns, 1)) {
+    return false
+  }
+  if (!await upgradeOfficeSize(ns, 'Agri', 9)) {
     return false
   }
   return true

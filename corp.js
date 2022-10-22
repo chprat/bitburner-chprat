@@ -535,6 +535,27 @@ async function upgradeOfficeSize (ns, divisionName, newSize) {
   return true
 }
 
+function hasIndustry (ns, industry) {
+  for (const division of ns.corporation.getCorporation().divisions) {
+    if (division.type === industry) {
+      return true
+    }
+  }
+  return false
+}
+
+function expandIndustry (ns, industry, name) {
+  if (hasIndustry(ns, industry)) {
+    return true
+  }
+  if (ns.corporation.getExpandIndustryCost(industry) > ns.corporation.getCorporation().funds) {
+    ns.print(`Not enough money to expand to ${industry}`)
+    return false
+  }
+  ns.corporation.expandIndustry(industry, name)
+  return true
+}
+
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
     return false
@@ -581,6 +602,15 @@ async function initialSetup (ns) {
     return false
   }
   if (!await buyMaterials(ns, 'Agri', 3)) {
+    return false
+  }
+  if (!expandIndustry(ns, 'Tobacco', 'Toba')) {
+    return false
+  }
+  if (!expandCities(ns, 'Toba')) {
+    return false
+  }
+  if (!purchaseWarehouses(ns, 'Toba')) {
     return false
   }
   return true

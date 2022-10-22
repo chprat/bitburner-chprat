@@ -671,6 +671,13 @@ export async function main (ns) {
   }
   while (true) {
     await smallTownAchievement(ns)
+    doUpgrade(ns, 'FocusWires', 20)
+    doUpgrade(ns, 'Neural Accelerators', 20)
+    doUpgrade(ns, 'Speech Processor Implants', 20)
+    doUpgrade(ns, 'Nuoptimal Nootropic Injector Implants', 20)
+    if (ns.corporation.getCorporation().funds > 3e12) {
+      doUpgrade(ns, 'Wilson Analytics', 14)
+    }
     const corp = ns.corporation.getCorporation()
     for (const division of corp.divisions) {
       expandCities(ns, division.name)

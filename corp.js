@@ -547,6 +547,12 @@ async function initialSetup (ns) {
   if (!await upgradeOfficeSize(ns, 'Agri', 9)) {
     return false
   }
+  if (!doUpgrade(ns, 'Smart Factories', 10)) {
+    return false
+  }
+  if (!doUpgrade(ns, 'Smart Storage', 10)) {
+    return false
+  }
   return true
 }
 

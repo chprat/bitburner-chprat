@@ -373,6 +373,15 @@ async function assignEmployees (ns) {
           await ns.corporation.setAutoJobAssignment(division.name, city, 'Research & Development', 2)
         }
       }
+      if (officeData.size === 30) {
+        if (officeData.employeeJobs.Unassigned > 0) {
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Operations', 6)
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Engineer', 6)
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Business', 6)
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Management', 6)
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Research & Development', 6)
+        }
+      }
     }
   }
 }
@@ -535,6 +544,21 @@ async function upgradeOfficeSize (ns, divisionName, newSize) {
   return true
 }
 
+async function upgradeMainOfficeSize (ns, divisionName, newSize) {
+  const division = ns.corporation.getDivision(divisionName)
+  const currentSize = ns.corporation.getOffice(division.name, mainCity).size
+  if (currentSize >= newSize) {
+    return true
+  }
+  if (ns.corporation.getOfficeSizeUpgradeCost(division.name, mainCity, newSize - currentSize) > ns.corporation.getCorporation().funds) {
+    ns.print(`Not enough money to upgrade ${mainCity} office of ${division.name} to ${newSize}`)
+    return false
+  }
+  ns.corporation.upgradeOfficeSize(division.name, mainCity, newSize - currentSize)
+  await assignEmployees(ns)
+  return true
+}
+
 function hasIndustry (ns, industry) {
   for (const division of ns.corporation.getCorporation().divisions) {
     if (division.type === industry) {
@@ -611,6 +635,12 @@ async function initialSetup (ns) {
     return false
   }
   if (!purchaseWarehouses(ns, 'Toba')) {
+    return false
+  }
+  if (!await upgradeMainOfficeSize(ns, 'Toba', 30)) {
+    return false
+  }
+  if (!await upgradeOfficeSize(ns, 'Toba', 9)) {
     return false
   }
   return true

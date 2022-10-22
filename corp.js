@@ -477,6 +477,23 @@ async function buyMaterials (ns, divisionName, stage) {
   return true
 }
 
+function checkInvestmentOffer (ns, round) {
+  const offers = {
+    1: 210e9
+  }
+  const offer = ns.corporation.getInvestmentOffer()
+  if (round !== offer.round) {
+    return true
+  }
+  if (offer.funds >= offers[round]) {
+    ns.corporation.acceptInvestmentOffer()
+    return true
+  } else {
+    ns.print(`Offer ${offer.funds} in round ${offer.round} is to low (${offers[round]}).`)
+    return false
+  }
+}
+
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
     return false
@@ -496,6 +513,9 @@ async function initialSetup (ns) {
     return false
   }
   if (!await buyMaterials(ns, 'Agri', 1)) {
+    return false
+  }
+  if (!checkInvestmentOffer(ns, 1)) {
     return false
   }
   return true

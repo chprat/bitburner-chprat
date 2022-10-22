@@ -570,6 +570,9 @@ async function initialSetup (ns) {
   if (!checkInvestmentOffer(ns, 2)) {
     return false
   }
+  if (!upgradeStorageSize(ns, 'Agri', 3800)) {
+    return false
+  }
   return true
 }
 

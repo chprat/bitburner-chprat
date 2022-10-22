@@ -35,7 +35,10 @@ function doFactionWork (ns, necessary = true) {
       }
       success = ns.singularity.workForFaction(faction.name, 'Hacking Contracts', focus)
       if (!success) {
-        ns.print(`Couldn't start working for ${faction.name}`)
+        success = ns.singularity.workForFaction(faction.name, 'Field Work', focus)
+        if (!success) {
+          ns.print(`Couldn't start working for ${faction.name}`)
+        }
       }
     }
     break

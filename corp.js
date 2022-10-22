@@ -401,6 +401,17 @@ function upgradeStorageSize (ns, division, size) {
   return true
 }
 
+function sellMaterials (ns, divisionName) {
+  const division = ns.corporation.getDivision(divisionName)
+  for (const city of division.cities) {
+    for (const material of producedMaterials[division.type]) {
+      if (ns.corporation.getMaterial(division.name, city, material).sCost === 0) {
+        ns.corporation.sellMaterial(division.name, city, material, 'MAX', 'MP')
+      }
+    }
+  }
+}
+
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
     return false
@@ -415,6 +426,7 @@ async function initialSetup (ns) {
   if (!upgradeStorageSize(ns, 'Agri', 300)) {
     return false
   }
+  sellMaterials(ns, 'Agri')
   return true
 }
 
@@ -481,6 +493,10 @@ const researchNames = {
   dash: 'uPgrade: Dashboard',
   cap1: 'uPgrade: Capacity.I',
   cap2: 'uPgrade: Capacity.II'
+}
+
+const producedMaterials = {
+  Agriculture: ['Plants', 'Food']
 }
 
 const cities = ['Aevum', 'Chongqing', 'Sector-12', 'New Tokyo', 'Ishima', 'Volhaven']

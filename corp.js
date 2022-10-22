@@ -412,6 +412,32 @@ function sellMaterials (ns, divisionName) {
   }
 }
 
+function doUpgrade (ns, upgradeName, targetLevel) {
+  const currentLevel = ns.corporation.getUpgradeLevel(upgradeName)
+  if (currentLevel >= targetLevel) {
+    return true
+  }
+  if (ns.corporation.getUpgradeLevelCost(upgradeName) <= ns.corporation.getCorporation().funds) {
+    ns.corporation.levelUpgrade(upgradeName)
+  } else {
+    ns.print(`Not enough money to upgrade ${upgradeName} to ${targetLevel}`)
+    return false
+  }
+  return true
+}
+
+function buyFirstUpgrades (ns) {
+  const upgrades = ['FocusWires', 'Neural Accelerators', 'Speech Processor Implants', 'Nuoptimal Nootropic Injector Implants', 'Smart Factories']
+  for (let i = 1; i <= 2; i++) {
+    for (const upgrade of upgrades) {
+      if (!doUpgrade(ns, upgrade, i)) {
+        return false
+      }
+    }
+  }
+  return true
+}
+
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
     return false
@@ -427,6 +453,9 @@ async function initialSetup (ns) {
     return false
   }
   sellMaterials(ns, 'Agri')
+  if (!buyFirstUpgrades(ns)) {
+    return false
+  }
   return true
 }
 

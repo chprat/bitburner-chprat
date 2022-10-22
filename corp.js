@@ -368,6 +368,21 @@ async function assignEmployees (ns) {
   }
 }
 
+function buyFirstAdVert (ns) {
+  const divisions = ns.corporation.getCorporation().divisions
+  for (const division of divisions) {
+    if (ns.corporation.getHireAdVertCount(division.name) === 0) {
+      if (ns.corporation.getHireAdVertCost(division.name) <= ns.corporation.getCorporation().funds) {
+        ns.corporation.hireAdVert(division.name)
+      } else {
+        ns.print(`Not enough money to buy 1st AdVert for ${division.name}`)
+        return false
+      }
+    }
+  }
+  return true
+}
+
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
     return false
@@ -376,6 +391,9 @@ async function initialSetup (ns) {
     return false
   }
   await assignEmployees(ns)
+  if (!buyFirstAdVert(ns)) {
+    return false
+  }
   return true
 }
 

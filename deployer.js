@@ -43,13 +43,13 @@ export async function onHome (ns) {
     { name: 'trader.js', threads: 0, mem: 0 },
     { name: 'corp.js', threads: 0, mem: 0 },
     { name: 'gang.js', threads: 1, mem: 0 },
-    { name: 'hacknet.js', threads: 1, mem: 0 },
     { name: 'psrv.js', threads: 1, mem: 0 },
     { name: 'upgrader.js', threads: 1, mem: 0 },
     { name: 'worker.js', threads: 1, mem: 0 },
     { name: 'backdoorer.js', threads: 1, mem: 0 },
     { name: 'joiner.js', threads: 1, mem: 0 },
-    { name: 'buyer.js', threads: 1, mem: 0 }
+    { name: 'buyer.js', threads: 1, mem: 0 },
+    { name: 'hacknet.js', threads: 1, mem: 0 }
   ]
   const optionalScripts = ['solver.js', 'trader.js', 'corp.js']
   const waitForScripts = [

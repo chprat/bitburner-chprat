@@ -349,6 +349,25 @@ function enableSmartSupply (ns) {
   return true
 }
 
+async function assignEmployees (ns) {
+  const divisions = ns.corporation.getCorporation().divisions
+  for (const division of divisions) {
+    for (const city of division.cities) {
+      while (ns.corporation.hireEmployee(division.name, city) !== undefined) {
+        await ns.sleep(1000)
+      }
+      const officeData = ns.corporation.getOffice(division.name, city)
+      if (officeData.size === 3) {
+        if (officeData.employeeJobs.Unassigned > 0) {
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Operations', 1)
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Engineer', 1)
+          await ns.corporation.setAutoJobAssignment(division.name, city, 'Business', 1)
+        }
+      }
+    }
+  }
+}
+
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
     return false
@@ -356,6 +375,7 @@ async function initialSetup (ns) {
   if (!enableSmartSupply(ns)) {
     return false
   }
+  await assignEmployees(ns)
   return true
 }
 

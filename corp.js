@@ -383,6 +383,24 @@ function buyFirstAdVert (ns) {
   return true
 }
 
+function upgradeStorageSize (ns, division, size) {
+  for (const city of cities) {
+    if (!ns.corporation.hasWarehouse(division, city)) {
+      ns.print(`${city} of ${division} doesn't have a warehouse, can't upgrade it!`)
+      return false
+    }
+    while (ns.corporation.getWarehouse(division, city).size < size) {
+      if (ns.corporation.getUpgradeWarehouseCost(division, city) <= ns.corporation.getCorporation().funds) {
+        ns.corporation.upgradeWarehouse(division, city)
+      } else {
+        ns.print(`Not enough money to upgrade warehouse in ${city} of ${division}`)
+        return false
+      }
+    }
+  }
+  return true
+}
+
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
     return false
@@ -392,6 +410,9 @@ async function initialSetup (ns) {
   }
   await assignEmployees(ns)
   if (!buyFirstAdVert(ns)) {
+    return false
+  }
+  if (!upgradeStorageSize(ns, 'Agri', 300)) {
     return false
   }
   return true

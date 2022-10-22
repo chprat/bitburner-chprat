@@ -333,6 +333,9 @@ async function raiseDivision (ns, division) {
 }
 
 async function initialSetup (ns) {
+  if (!purchaseWarehouses(ns, 'Agri')) {
+    return false
+  }
   return true
 }
 

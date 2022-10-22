@@ -512,10 +512,19 @@ async function buyMaterials (ns, divisionName, stage) {
 function checkInvestmentOffer (ns, round) {
   const offers = {
     1: 210e9,
-    2: 5e12
+    2: 5e12,
+    3: 800e12,
+    4: 10e15
   }
   const offer = ns.corporation.getInvestmentOffer()
   if (round !== offer.round) {
+    return true
+  }
+  if (round === 5) {
+    if (!ns.corporation.getCorporation().public) {
+      ns.corporation.goPublic(50e6)
+      ns.corporation.issueDividends(0.9)
+    }
     return true
   }
   if (offer.funds >= offers[round]) {
@@ -678,6 +687,9 @@ export async function main (ns) {
     if (ns.corporation.getCorporation().funds > 3e12) {
       doUpgrade(ns, 'Wilson Analytics', 14)
     }
+    checkInvestmentOffer(ns, 3)
+    checkInvestmentOffer(ns, 4)
+    checkInvestmentOffer(ns, 5)
     const corp = ns.corporation.getCorporation()
     for (const division of corp.divisions) {
       expandCities(ns, division.name)

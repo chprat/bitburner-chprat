@@ -227,11 +227,11 @@ function purchasedAllWarehouses (ns, division) {
 function purchaseWarehouses (ns, division) {
   if (!expandedToAllCities(ns, division)) {
     ns.print(`${division} not expanded to all cities, not purchasing warehouses`)
-    return
+    return false
   }
   if (purchasedAllWarehouses(ns, division)) {
     ns.print(`${division} already has all warehouses`)
-    return
+    return true
   }
   const existingCities = ns.corporation.getDivision(division).cities
   for (const city of existingCities) {
@@ -241,10 +241,11 @@ function purchaseWarehouses (ns, division) {
         ns.corporation.purchaseWarehouse(division, city)
       } else {
         ns.print(`Not enough funds to buy another warehouse for ${division}`)
-        break
+        return false
       }
     }
   }
+  return true
 }
 
 function raisedDivision (ns, division) {

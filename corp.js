@@ -332,6 +332,10 @@ async function raiseDivision (ns, division) {
   }
 }
 
+async function initialSetup (ns) {
+  return true
+}
+
 /** @param {NS} ns **/
 export async function main (ns) {
   if (!ns.getPlayer().hasCorporation) {
@@ -349,6 +353,10 @@ export async function main (ns) {
   }
   if (!hasAPIAccess(ns)) {
     ns.print("We don't have full API access, corp must be run manually!")
+    return
+  }
+  if (!await initialSetup(ns)) {
+    ns.print('Still setting up the company!')
     return
   }
   while (true) {

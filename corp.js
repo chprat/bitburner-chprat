@@ -480,6 +480,13 @@ async function buyMaterials (ns, divisionName, stage) {
       Robots: 96,
       'AI Cores': 2520,
       'Real Estate': 146400
+    },
+    3: {
+      materials: ['Hardware', 'Robots', 'AI Cores', 'Real Estate'],
+      Hardware: 9300,
+      Robots: 726,
+      'AI Cores': 6270,
+      'Real Estate': 230400
     }
   }
   const division = ns.corporation.getDivision(divisionName)
@@ -571,6 +578,9 @@ async function initialSetup (ns) {
     return false
   }
   if (!upgradeStorageSize(ns, 'Agri', 3800)) {
+    return false
+  }
+  if (!await buyMaterials(ns, 'Agri', 3)) {
     return false
   }
   return true

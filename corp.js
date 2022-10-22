@@ -655,6 +655,42 @@ async function initialSetup (ns) {
   return true
 }
 
+function research (ns, divisionName) {
+  const division = ns.corporation.getDivision(divisionName)
+  if (!ns.corporation.hasResearched(division.name, researchNames.lab)) {
+    if (ns.corporation.getResearchCost(division.name, researchNames.lab) * 2 < division.research) {
+      ns.corporation.research(division.name, researchNames.lab)
+      return
+    } else {
+      return
+    }
+  }
+  if (division.makesProducts === true) {
+    if (!ns.corporation.hasResearched(division.name, researchNames.mta1) &&
+          !ns.corporation.hasResearched(division.name, researchNames.mta2)) {
+      let researchCost = ns.corporation.getResearchCost(division.name, researchNames.mta1)
+      researchCost += ns.corporation.getResearchCost(division.name, researchNames.mta2)
+      if (researchCost * 2 < division.research) {
+        ns.corporation.research(division.name, researchNames.mta1)
+        ns.corporation.research(division.name, researchNames.mta2)
+        return
+      } else {
+        return
+      }
+    }
+    for (const researchName of Object.values(researchNames)) {
+      if (!ns.corporation.hasResearched(division.name, researchName)) {
+        if (ns.corporation.getResearchCost(division.name, researchName) * 2 < division.research) {
+          ns.corporation.research(division.name, researchName)
+          return
+        } else {
+          return
+        }
+      }
+    }
+  }
+}
+
 /** @param {NS} ns **/
 export async function main (ns) {
   if (!ns.getPlayer().hasCorporation) {
@@ -693,6 +729,7 @@ export async function main (ns) {
     const corp = ns.corporation.getCorporation()
     for (const division of corp.divisions) {
       expandCities(ns, division.name)
+      research(ns, division.name)
       purchaseWarehouses(ns, division.name)
       if (division.makesProducts === true) {
         await raiseDivision(ns, division.name)

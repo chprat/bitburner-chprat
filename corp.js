@@ -197,7 +197,7 @@ function expandedToAllCities (ns, division) {
 function expandCities (ns, division) {
   if (expandedToAllCities(ns, division)) {
     ns.print(`${division} already expanded to all cities`)
-    return
+    return true
   }
   const existingCities = ns.corporation.getDivision(division).cities
   for (const city of cities) {
@@ -207,10 +207,11 @@ function expandCities (ns, division) {
         ns.corporation.expandCity(division, city)
       } else {
         ns.print(`Not enough funds to expand ${division} to another city`)
-        break
+        return false
       }
     }
   }
+  return true
 }
 
 function purchasedAllWarehouses (ns, division) {

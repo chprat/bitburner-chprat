@@ -122,18 +122,15 @@ export async function main (ns) {
   const servers = listServers(ns).filter(s => s !== 'darkweb')
     .filter(s => s !== 'home')
     .filter(s => !s.includes('psrv'))
-  while (true) {
-    const contracts = servers.flatMap((s) => {
-      const onServer = ns.ls(s, '.cct').map((contract) => {
-        const type = ns.codingcontract.getContractType(contract, s)
-        const data = ns.codingcontract.getData(contract, s)
-        const didSolve = solve(type, data, s, contract, ns)
-        return `${s} - ${contract} - ${type} - ${didSolve || 'FAILED!'}`
-      })
-      return onServer
+  const contracts = servers.flatMap((s) => {
+    const onServer = ns.ls(s, '.cct').map((contract) => {
+      const type = ns.codingcontract.getContractType(contract, s)
+      const data = ns.codingcontract.getData(contract, s)
+      const didSolve = solve(type, data, s, contract, ns)
+      return `${s} - ${contract} - ${type} - ${didSolve || 'FAILED!'}`
     })
-    contracts.filter(s => s.includes('FAILED'))
-      .forEach((contract) => ns.print(contract))
-    await ns.sleep(600000)
-  }
+    return onServer
+  })
+  contracts.filter(s => s.includes('FAILED'))
+    .forEach((contract) => ns.tprint(contract))
 }

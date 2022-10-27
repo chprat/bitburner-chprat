@@ -39,7 +39,7 @@ export async function onHome (ns) {
     { name: 'rooter.js', threads: 1, mem: 0 },
     { name: 'hacker.js', threads: 0, mem: 0 },
     { name: 'deployer.js', threads: 1, mem: 0 },
-    { name: 'solver.js', threads: 0, mem: 0 },
+    { name: 'solver.js', threads: 1, mem: 0 },
     { name: 'trader.js', threads: 0, mem: 0 },
     { name: 'corp.js', threads: 0, mem: 0 },
     { name: 'gang.js', threads: 1, mem: 0 },
@@ -51,8 +51,9 @@ export async function onHome (ns) {
     { name: 'buyer.js', threads: 1, mem: 0 },
     { name: 'hacknet.js', threads: 1, mem: 0 }
   ]
-  const optionalScripts = ['solver.js', 'trader.js', 'corp.js']
+  const optionalScripts = ['trader.js', 'corp.js']
   const waitForScripts = [
+    'solver.js',
     'gang.js',
     'hacknet.js',
     'psrv.js',

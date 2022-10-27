@@ -19,7 +19,7 @@ export function generateIPs (num) {
       }
     }
   }
-  return ips
+  return ips.join(',')
 }
 
 function isValidIpSegment (segment) {

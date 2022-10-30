@@ -1,12 +1,28 @@
 // Stock market bot for bitburner, primary written by steamid/Meng- https://danielyxie.github.io/bitburner/
 // Modified by Tonalnan https://steamcommunity.com/profiles/76561198152627199/
 
+/** @param {NS} ns **/
 export async function main (ns) {
   ns.disableLog('sleep')
   ns.disableLog('getServerMoneyAvailable')
-  try {
-    ns.stock.getSymbols()
-  } catch {
+  const has4SData = ns.stock.has4SData()
+  if (!has4SData) {
+    ns.print("Can't continue, 4S Data missing")
+    return
+  }
+  const has4SDataTIXAPI = ns.stock.has4SDataTIXAPI()
+  if (!has4SDataTIXAPI) {
+    ns.print("Can't continue, 4S Data TIX API missing")
+    return
+  }
+  const hasTIXAPIAccess = ns.stock.hasTIXAPIAccess()
+  if (!hasTIXAPIAccess) {
+    ns.print("Can't continue, TIX API missing")
+    return
+  }
+  const hasWSEAccount = ns.stock.hasWSEAccount()
+  if (!hasWSEAccount) {
+    ns.print("Can't continue, WSE account missing")
     return
   }
   const stockSymbols = ns.stock.getSymbols() // all symbols

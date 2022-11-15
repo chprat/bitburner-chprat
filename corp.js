@@ -510,11 +510,12 @@ async function buyMaterials (ns, divisionName, stage) {
 }
 
 function checkInvestmentOffer (ns, round) {
+  const { CorporationValuation } = ns.getBitNodeMultipliers()
   const offers = {
-    1: 210e9,
-    2: 5e12,
-    3: 800e12,
-    4: 10e15
+    1: 210e9 * CorporationValuation,
+    2: 5e12 * CorporationValuation,
+    3: 800e12 * CorporationValuation,
+    4: 10e15 * CorporationValuation
   }
   const offer = ns.corporation.getInvestmentOffer()
   if (round !== offer.round) {

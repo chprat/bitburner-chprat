@@ -13,5 +13,6 @@ function minJumps (data, n) {
 export function arrayJumpingGame2 (data) {
   if (data.length === 1) return 0
   if (data[0] === 0) return 0
-  return minJumps(data, data.length)
+  const res = minJumps(data, data.length)
+  return (res === Number.MAX_VALUE) ? 0 : res
 }

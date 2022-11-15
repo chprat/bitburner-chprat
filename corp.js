@@ -249,14 +249,16 @@ function purchaseWarehouses (ns, division) {
 }
 
 function raisedDivision (ns, division) {
+  const { CorporationValuation } = ns.getBitNodeMultipliers()
+  const employeeScalingFactor = 1 / CorporationValuation
   const existingCities = ns.corporation.getDivision(division).cities
   for (const city of existingCities) {
     if (city !== mainCity) {
-      if (ns.corporation.getOffice(division, city).size < sideCityEmployees) {
+      if (ns.corporation.getOffice(division, city).size < sideCityEmployees * employeeScalingFactor) {
         return false
       }
     } else {
-      if (ns.corporation.getOffice(division, city).size < mainCityEmployees) {
+      if (ns.corporation.getOffice(division, city).size < mainCityEmployees * employeeScalingFactor) {
         return false
       }
     }

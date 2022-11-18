@@ -36,6 +36,7 @@ export async function runAndWait (ns, script, server) {
 
 export async function onHome (ns) {
   const scripts = [
+    { name: 'bootstrapper.js', threads: 1, mem: 0 },
     { name: 'rooter.js', threads: 1, mem: 0 },
     { name: 'hacker.js', threads: 0, mem: 0 },
     { name: 'deployer.js', threads: 1, mem: 0 },
@@ -53,6 +54,7 @@ export async function onHome (ns) {
   ]
   const optionalScripts = ['trader.js', 'corp.js']
   const waitForScripts = [
+    'bootstrapper.js',
     'solver.js',
     'gang.js',
     'hacknet.js',
@@ -68,6 +70,9 @@ export async function onHome (ns) {
   }
   const waitForScriptsRAM = []
   for (const waitForScript of waitForScripts) {
+    if (waitForScript === 'bootstrapper.js' && ns.getServerMaxRam('home') >= 64) {
+      continue
+    }
     waitForScriptsRAM.push(scripts.find(e => e.name === waitForScript).mem)
   }
   const maxWaitForScriptsRAM = Math.max(...waitForScriptsRAM)
@@ -91,6 +96,9 @@ export async function onHome (ns) {
       if (script.threads > 0) {
         let pid
         if (waitForScripts.includes(script.name)) {
+          if (script.name === 'bootstrapper.js' && ns.getServerMaxRam('home') >= 64) {
+            continue
+          }
           pid = await runAndWait(ns, script, 'home')
         } else {
           pid = ns.run(script.name, script.threads)

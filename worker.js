@@ -138,7 +138,10 @@ async function killAndKarma (ns) {
     ns.singularity.commitCrime('Homicide', focus)
     await ns.sleep(10000)
   }
-  ns.singularity.stopAction()
+  const currentWork = ns.singularity.getCurrentWork()
+  if (ns.singularity.isBusy() && currentWork.type === 'CRIME' && currentWork.crimeType === 'Homicide') {
+    ns.singularity.stopAction()
+  }
 }
 
 /** @param {NS} ns **/

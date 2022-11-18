@@ -1,6 +1,7 @@
 import { getFactionsSortedByMissingRep, getCompanies, joinedFaction } from 'imports/factionHelpers.js'
 import { hasMissingAugs } from 'imports/augmentationHelpers.js'
 import { getPrograms } from 'imports/workHelpers.js'
+import { getCrimeForWork } from 'imports/crimeHelpers.js'
 
 let focus = true
 
@@ -178,5 +179,9 @@ export async function main (ns) {
     if (!hasMissingAugs(ns, ns.singularity.getCurrentWork().factionName, false)) {
       ns.singularity.stopAction()
     }
+  }
+  if (!ns.singularity.isBusy()) {
+    const crime = getCrimeForWork(ns)
+    ns.singularity.commitCrime(crime, focus)
   }
 }

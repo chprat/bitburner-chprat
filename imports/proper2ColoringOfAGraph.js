@@ -37,5 +37,5 @@ export function proper2ColoringOfAGraph (data) {
       }
     }
   }
-  return colors
+  return colors.join(',')
 }

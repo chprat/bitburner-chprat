@@ -1,10 +1,10 @@
-import { joinedFaction, getFactionsSortedByMissingRep, getAllFactionsWithMissingAugs, CriminalFactions, EndGameFactions } from 'imports/factionHelpers.js'
+import { joinedFaction, getFactionsSortedByMissingRep, getAllFactionsWithMissingAugs, CriminalFactions, EndGameFactions, getFocusFactions } from 'imports/factionHelpers.js'
 import { augIsNecessary, hasMissingAugs, missingAugs, isAugInstalled } from 'imports/augmentationHelpers.js'
 
 function buyAugmentations (ns, necessary = true) {
   let openAugmentations = []
   let factions = getFactionsSortedByMissingRep(ns, true, necessary)
-  const focusFactions = ['Netburners', 'CyberSec', 'Tian Di Hui', 'Sector-12', 'Aevum', 'NiteSec', 'The Black Hand', 'BitRunners']
+  const focusFactions = getFocusFactions()
   for (const faction of focusFactions) {
     if (hasMissingAugs(ns, faction, necessary) && joinedFaction(ns, faction)) {
       ns.print(`Focus on augments from ${faction}`)

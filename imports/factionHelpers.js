@@ -111,3 +111,7 @@ export function getFactionsSortedByRep (ns) {
   }
   return factions.sort((a, b) => b.reputation - a.reputation)
 }
+
+export function getFocusFactions () {
+  return ['Netburners', 'CyberSec', 'Tian Di Hui', 'Sector-12', 'Aevum', 'NiteSec', 'The Black Hand', 'BitRunners']
+}

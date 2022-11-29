@@ -136,15 +136,21 @@ function buyOrCreateProgram (ns) {
 async function killAndKarma (ns) {
   ns.print('Check if we need to commit some crimes')
   while (ns.getPlayer().numPeopleKilled < 30) {
-    ns.singularity.commitCrime('Homicide', focus)
+    const currentWork = ns.singularity.getCurrentWork()
+    if (!ns.singularity.isBusy() || (currentWork.type !== 'CRIME' && currentWork.crimeType !== 'HOMICIDE')) {
+      ns.singularity.commitCrime('HOMICIDE', focus)
+    }
     await ns.sleep(10000)
   }
   while (ns.heart.break() > -90) {
-    ns.singularity.commitCrime('Homicide', focus)
+    const currentWork = ns.singularity.getCurrentWork()
+    if (!ns.singularity.isBusy() || (currentWork.type !== 'CRIME' && currentWork.crimeType !== 'HOMICIDE')) {
+      ns.singularity.commitCrime('HOMICIDE', focus)
+    }
     await ns.sleep(10000)
   }
   const currentWork = ns.singularity.getCurrentWork()
-  if (ns.singularity.isBusy() && currentWork.type === 'CRIME' && currentWork.crimeType === 'Homicide') {
+  if (ns.singularity.isBusy() && currentWork.type === 'CRIME' && currentWork.crimeType === 'HOMICIDE') {
     ns.singularity.stopAction()
   }
 }

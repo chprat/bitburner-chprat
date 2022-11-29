@@ -1,4 +1,4 @@
-import { missingAugs, hasMissingAugs } from 'imports/augmentationHelpers.js'
+import { missingAugs, hasMissingAugs, factionOffersNG } from 'imports/augmentationHelpers.js'
 
 export const HackingFactions = [
   { name: 'CyberSec', server: 'CSEC' },
@@ -88,16 +88,26 @@ export function getAllFactionsWithMissingAugs (ns, necessary = true) {
   return allFactionsWithMissingAugs
 }
 
-export function getFactionWithMostRep (ns) {
-  const factions = ns.getPlayer().factions
-  let fac = ''
-  let rep = 0
+export function getFactionWithMostRepAndNG (ns) {
+  const factions = getFactionsSortedByRep(ns)
   for (const faction of factions) {
-    const curRep = ns.singularity.getFactionRep(faction)
-    if (rep < curRep) {
-      rep = curRep
-      fac = faction
+    if (factionOffersNG(ns, faction.name)) {
+      return faction.name
     }
   }
-  return fac
+}
+
+export function getFactionsSortedByRep (ns) {
+  const playerFactions = ns.getPlayer().factions
+  const factions = []
+  for (const playerFaction of playerFactions) {
+    const faction = {
+      name: '',
+      reputation: 0
+    }
+    faction.name = playerFaction
+    faction.reputation = ns.singularity.getFactionRep(playerFaction)
+    factions.push(faction)
+  }
+  return factions.sort((a, b) => b.reputation - a.reputation)
 }

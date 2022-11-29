@@ -72,3 +72,7 @@ export function getAllMissingAugs (ns, factions) {
   }
   return missingAugs.sort((a, b) => (a.name > b.name) ? 1 : -1)
 }
+
+export function factionOffersNG (ns, faction) {
+  return ns.singularity.getAugmentationsFromFaction(faction).includes('NeuroFlux Governor')
+}

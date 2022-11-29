@@ -1,4 +1,4 @@
-import { getFactionWithMostRep } from 'imports/factionHelpers.js'
+import { getFactionWithMostRepAndNG } from 'imports/factionHelpers.js'
 
 /** @param {NS} ns **/
 export async function main (ns) {
@@ -11,7 +11,7 @@ export async function main (ns) {
     }
   } catch {
   }
-  const factionWithMostRep = getFactionWithMostRep(ns)
+  const factionWithMostRep = getFactionWithMostRepAndNG(ns)
   let success = true
   while (success) {
     success = ns.singularity.purchaseAugmentation(factionWithMostRep, 'NeuroFlux Governor')

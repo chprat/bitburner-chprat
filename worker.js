@@ -9,6 +9,10 @@ function doFactionWork (ns, necessary = true) {
   ns.print('Check if we need to do faction work')
   const factions = getFactionsSortedByMissingRep(ns, true, necessary)
   for (const faction of factions) {
+    // Shadows of Anarchy doesn't offer any work
+    if (faction.name === 'Shadows of Anarchy') {
+      continue
+    }
     if (!hasMissingAugs(ns, faction.name, necessary)) {
       ns.print(`We don't need any augmentations from ${faction.name}`)
       continue

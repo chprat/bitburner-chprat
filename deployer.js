@@ -46,6 +46,7 @@ export async function onHome (ns) {
     { name: 'gang.js', threads: 1, mem: 0 },
     { name: 'psrv.js', threads: 1, mem: 0 },
     { name: 'upgrader.js', threads: 1, mem: 0 },
+    { name: 'sleever.js', threads: 1, mem: 0 },
     { name: 'worker.js', threads: 1, mem: 0 },
     { name: 'backdoorer.js', threads: 1, mem: 0 },
     { name: 'joiner.js', threads: 1, mem: 0 },
@@ -63,7 +64,8 @@ export async function onHome (ns) {
     'buyer.js',
     'backdoorer.js',
     'joiner.js',
-    'worker.js'
+    'worker.js',
+    'sleever.js'
   ]
   for (const script of scripts) {
     script.mem = ns.getScriptRam(script.name)

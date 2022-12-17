@@ -1,4 +1,4 @@
-import { getCrimeForWork } from 'imports/crimeHelpers.js'
+import { getBestCrimeForWork } from 'imports/crimeHelpers.js'
 
 /** @param {NS} ns **/
 export async function main (ns) {
@@ -26,7 +26,7 @@ export async function main (ns) {
         }
       }
     } else {
-      const crime = (ns.heart.break() > -54000) ? 'Homicide' : getCrimeForWork(ns)
+      const crime = (ns.heart.break() > -54000) ? 'Homicide' : getBestCrimeForWork(ns, false, i)
       if (!ns.sleeve.setToCommitCrime(i, crime)) {
         ns.print(`Couldn't set sleeve ${i} to commit crime ${crime}`)
       }

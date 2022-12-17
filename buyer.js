@@ -50,6 +50,7 @@ function buyAugmentations (ns, necessary = true) {
         ns.print(`Couldn't buy ${openAugmentation.name} from ${openAugmentation.faction}`)
       } else {
         ns.print(`Bought ${openAugmentation.name} from ${openAugmentation.faction}`)
+        continue
       }
     }
     if (!hasMoney) {

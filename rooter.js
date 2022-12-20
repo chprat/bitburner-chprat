@@ -66,6 +66,7 @@ export async function main (ns) {
   const servers = listServers(ns).filter(s => s !== 'darkweb')
     .filter(s => s !== 'home')
     .filter(s => !s.includes('psrv'))
+    .filter(s => !s.includes('hacknet-node'))
   while (true) {
     for (const server of servers) {
       own(ns, server)

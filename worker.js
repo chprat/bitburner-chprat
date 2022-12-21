@@ -1,4 +1,4 @@
-import { getFactionsSortedByMissingRep, getCompanies, joinedFaction } from 'imports/factionHelpers.js'
+import { getFactionsSortedByMissingRep, getCompanies, joinedFaction, getFocusFactions } from 'imports/factionHelpers.js'
 import { hasMissingAugs } from 'imports/augmentationHelpers.js'
 import { getPrograms } from 'imports/workHelpers.js'
 import { getBestCrimeForWork } from 'imports/crimeHelpers.js'
@@ -7,7 +7,19 @@ let focus = true
 
 function doFactionWork (ns, necessary = true) {
   ns.print('Check if we need to do faction work')
-  const factions = getFactionsSortedByMissingRep(ns, true, necessary)
+  const factionsSortedByMissingRep = getFactionsSortedByMissingRep(ns, true, necessary)
+  const focusFactions = getFocusFactions()
+  const factions = []
+  for (const faction of focusFactions) {
+    if (factionsSortedByMissingRep.filter(e => e.name === faction).length > 0) {
+      factions.push(factionsSortedByMissingRep.filter(e => e.name === faction).at(0))
+    }
+  }
+  for (const faction of factionsSortedByMissingRep) {
+    if (factions.filter(e => e.name === faction.name).length === 0) {
+      factions.push(factionsSortedByMissingRep.filter(e => e.name === faction.name).at(0))
+    }
+  }
   for (const faction of factions) {
     // Shadows of Anarchy doesn't offer any work
     if (faction.name === 'Shadows of Anarchy') {

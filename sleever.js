@@ -1,4 +1,5 @@
 import { getBestCrimeForWork } from 'imports/crimeHelpers.js'
+import { getCompanies, joinedFaction } from 'imports/factionHelpers.js'
 
 function mirrorPlayer (ns, sleeveNo) {
   const currentWork = ns.singularity.getCurrentWork()
@@ -6,7 +7,17 @@ function mirrorPlayer (ns, sleeveNo) {
     if (currentWork.type === 'CRIME') {
       return ns.sleeve.setToCommitCrime(sleeveNo, currentWork.crimeType)
     } else if ((currentWork.type === 'COMPANY')) {
-      return ns.sleeve.setToCompanyWork(sleeveNo, currentWork.companyName)
+      let alreadyWorking = false
+      for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
+        const task = ns.sleeve.getTask(i)
+        if (task !== null && task.type === 'COMPANY' && task.companyName === currentWork.companyName && i !== sleeveNo) {
+          alreadyWorking = true
+          break
+        }
+      }
+      if (!alreadyWorking) {
+        return ns.sleeve.setToCompanyWork(sleeveNo, currentWork.companyName)
+      }
     } else if ((currentWork.type === 'FACTION')) {
       return ns.sleeve.setToFactionWork(sleeveNo, currentWork.factionName, currentWork.factionWorkType)
     }
@@ -18,6 +29,59 @@ function commitCrime (ns, sleeveNo) {
   const crime = (ns.heart.break() > -54000) ? 'Homicide' : getBestCrimeForWork(ns, false, sleeveNo)
   if (!ns.sleeve.setToCommitCrime(sleeveNo, crime)) {
     ns.print(`Couldn't set sleeve ${sleeveNo} to commit crime ${crime}`)
+  }
+}
+
+function companyWork (ns, sleeveNo) {
+  let job = 'IT'
+  if (ns.getPlayer().skills.charisma >= 250) {
+    job = 'Business'
+  }
+  const companies = getCompanies(ns)
+  for (const company of companies) {
+    if (company === 'Fulcrum Technologies') {
+      if (!ns.getServer('fulcrumassets').backdoorInstalled) {
+        continue
+      }
+    }
+    let factionJoined = joinedFaction(ns, company)
+    if (company === 'Fulcrum Technologies') {
+      factionJoined = joinedFaction(ns, 'Fulcrum Secret Technologies')
+    }
+    if (!factionJoined || company === companies[companies.length - 1]) {
+      let alreadyWorking = false
+      for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
+        const task = ns.sleeve.getTask(i)
+        if (task !== null && task.type === 'COMPANY' && task.companyName === company && i !== sleeveNo) {
+          alreadyWorking = true
+          break
+        }
+      }
+      if (alreadyWorking) {
+        continue
+      }
+      const title = ns.getPlayer().jobs[company]
+      let success = ns.singularity.applyToCompany(company, job)
+      if (title === null) {
+        if (success) {
+          ns.print(`Applied at ${company} as ${ns.getPlayer().jobs[company]}`)
+        } else {
+          ns.print(`Couldn't apply at ${company} in ${job} field`)
+          return false
+        }
+      } else {
+        if (success) {
+          ns.print(`Got promoted to ${ns.getPlayer().jobs[company]} at ${company}`)
+        }
+      }
+      success = ns.sleeve.setToCompanyWork(sleeveNo, company)
+      if (!success) {
+        ns.print(`Couldn't start working for ${company}`)
+        return false
+      } else {
+        return true
+      }
+    }
   }
 }
 
@@ -37,6 +101,11 @@ export async function main (ns) {
 
     if (i === 0) {
       const success = mirrorPlayer(ns, i)
+      if (!success) {
+        commitCrime(ns, i)
+      }
+    } else if (i === 1) {
+      const success = companyWork(ns, i)
       if (!success) {
         commitCrime(ns, i)
       }

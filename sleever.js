@@ -14,6 +14,13 @@ function mirrorPlayer (ns, sleeveNo) {
   return false
 }
 
+function commitCrime (ns, sleeveNo) {
+  const crime = (ns.heart.break() > -54000) ? 'Homicide' : getBestCrimeForWork(ns, false, sleeveNo)
+  if (!ns.sleeve.setToCommitCrime(sleeveNo, crime)) {
+    ns.print(`Couldn't set sleeve ${sleeveNo} to commit crime ${crime}`)
+  }
+}
+
 /** @param {NS} ns **/
 export async function main (ns) {
   const sleeveAmount = ns.sleeve.getNumSleeves()
@@ -34,10 +41,7 @@ export async function main (ns) {
         commitCrime(ns, i)
       }
     } else {
-      const crime = (ns.heart.break() > -54000) ? 'Homicide' : getBestCrimeForWork(ns, false, i)
-      if (!ns.sleeve.setToCommitCrime(i, crime)) {
-        ns.print(`Couldn't set sleeve ${i} to commit crime ${crime}`)
-      }
+      commitCrime(ns, i)
     }
 
     for (const aug of ns.sleeve.getSleevePurchasableAugs(i)) {

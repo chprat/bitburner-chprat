@@ -1,5 +1,19 @@
 import { getBestCrimeForWork } from 'imports/crimeHelpers.js'
 
+function mirrorPlayer (ns, sleeveNo) {
+  const currentWork = ns.singularity.getCurrentWork()
+  if (ns.singularity.isBusy()) {
+    if (currentWork.type === 'CRIME') {
+      return ns.sleeve.setToCommitCrime(sleeveNo, currentWork.crimeType)
+    } else if ((currentWork.type === 'COMPANY')) {
+      return ns.sleeve.setToCompanyWork(sleeveNo, currentWork.companyName)
+    } else if ((currentWork.type === 'FACTION')) {
+      return ns.sleeve.setToFactionWork(sleeveNo, currentWork.factionName, currentWork.factionWorkType)
+    }
+  }
+  return false
+}
+
 /** @param {NS} ns **/
 export async function main (ns) {
   const sleeveAmount = ns.sleeve.getNumSleeves()
@@ -15,15 +29,9 @@ export async function main (ns) {
     }
 
     if (i === 0) {
-      const currentWork = ns.singularity.getCurrentWork()
-      if (ns.singularity.isBusy()) {
-        if (currentWork.type === 'CRIME') {
-          ns.sleeve.setToCommitCrime(i, currentWork.crimeType)
-        } else if ((currentWork.type === 'COMPANY')) {
-          ns.sleeve.setToCompanyWork(i, currentWork.companyName)
-        } else if ((currentWork.type === 'FACTION')) {
-          ns.sleeve.setToFactionWork(i, currentWork.factionName, currentWork.factionWorkType)
-        }
+      const success = mirrorPlayer(ns, i)
+      if (!success) {
+        commitCrime(ns, i)
       }
     } else {
       const crime = (ns.heart.break() > -54000) ? 'Homicide' : getBestCrimeForWork(ns, false, i)

@@ -45,7 +45,7 @@ export function getBestCrimeForWork (ns, isPlayer, sleeveNo = -1) {
       crimes.push({ name: crimeSuccessStats[elem].name, successChance: successChance })
     }
   })
-  return crimes[crimes.length - 1].name
+  return crimes.length > 0 ? crimes[crimes.length - 1].name : 'Shoplift'
 }
 
 function calculateIntelligenceBonus (intelligence, weight = 1) {

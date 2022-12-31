@@ -19,7 +19,17 @@ function mirrorPlayer (ns, sleeveNo) {
         return ns.sleeve.setToCompanyWork(sleeveNo, currentWork.companyName)
       }
     } else if ((currentWork.type === 'FACTION')) {
-      return ns.sleeve.setToFactionWork(sleeveNo, currentWork.factionName, currentWork.factionWorkType)
+      let alreadyWorking = false
+      for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
+        const task = ns.sleeve.getTask(i)
+        if (task !== null && task.type === 'FACTION' && task.factionName === currentWork.factionName && i !== sleeveNo) {
+          alreadyWorking = true
+          break
+        }
+      }
+      if (!alreadyWorking) {
+        return ns.sleeve.setToFactionWork(sleeveNo, currentWork.factionName, currentWork.factionWorkType)
+      }
     }
   }
   return false
@@ -85,6 +95,27 @@ function companyWork (ns, sleeveNo) {
   }
 }
 
+function hacking (ns, sleeveNo) {
+  const factions = ns.getPlayer().factions
+  for (const faction of factions) {
+    let alreadyWorking = false
+    for (let i = 0; i < ns.sleeve.getNumSleeves(); i++) {
+      const task = ns.sleeve.getTask(i)
+      if (task !== null && task.type === 'FACTION' && task.factionName === faction && i !== sleeveNo) {
+        alreadyWorking = true
+        break
+      }
+    }
+    if (!alreadyWorking) {
+      const success = ns.sleeve.setToFactionWork(sleeveNo, faction, 'Hacking Contracts')
+      if (success) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
 /** @param {NS} ns **/
 export async function main (ns) {
   const sleeveAmount = ns.sleeve.getNumSleeves()
@@ -106,6 +137,11 @@ export async function main (ns) {
       }
     } else if (i === 1) {
       const success = companyWork(ns, i)
+      if (!success) {
+        commitCrime(ns, i)
+      }
+    } else if (i === 2) {
+      const success = hacking(ns, i)
       if (!success) {
         commitCrime(ns, i)
       }

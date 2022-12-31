@@ -146,7 +146,11 @@ export async function main (ns) {
         commitCrime(ns, i)
       }
     } else {
-      commitCrime(ns, i)
+      if (isAugInstalled(ns, 'The Red Pill') && (ns.getHackingLevel() < ns.getServerRequiredHackingLevel('w0r1d_d43m0n'))) {
+        hacking(ns, i)
+      } else {
+        commitCrime(ns, i)
+      }
     }
 
     for (const aug of ns.sleeve.getSleevePurchasableAugs(i)) {

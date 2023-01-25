@@ -202,7 +202,7 @@ function expandCities (ns, division) {
   const existingCities = ns.corporation.getDivision(division).cities
   for (const city of cities) {
     if (!existingCities.includes(city)) {
-      if (ns.corporation.getCorporation().funds > ns.corporation.getExpandCityCost()) {
+      if (ns.corporation.getCorporation().funds > ns.corporation.getConstants().officeInitialCost) {
         ns.print(`Expanded ${division} to ${city}`)
         ns.corporation.expandCity(division, city)
       } else {

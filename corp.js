@@ -236,7 +236,7 @@ function purchaseWarehouses (ns, division) {
   const existingCities = ns.corporation.getDivision(division).cities
   for (const city of existingCities) {
     if (!ns.corporation.hasWarehouse(division, city)) {
-      if (ns.corporation.getCorporation().funds > ns.corporation.getPurchaseWarehouseCost()) {
+      if (ns.corporation.getCorporation().funds > ns.corporation.getConstants().warehouseInitialCost) {
         ns.print(`Purchased warehouse for ${division} in ${city}`)
         ns.corporation.purchaseWarehouse(division, city)
       } else {

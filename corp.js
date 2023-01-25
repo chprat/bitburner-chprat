@@ -696,7 +696,7 @@ function research (ns, divisionName) {
 
 /** @param {NS} ns **/
 export async function main (ns) {
-  if (!ns.getPlayer().hasCorporation) {
+  if (!ns.corporation.hasCorporation()) {
     ns.print("You don't have a company!")
     const success = tryCreateCorp(ns)
     if (!success) {

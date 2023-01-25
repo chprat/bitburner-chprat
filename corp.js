@@ -585,7 +585,7 @@ function expandIndustry (ns, industry, name) {
   if (hasIndustry(ns, industry)) {
     return true
   }
-  if (ns.corporation.getExpandIndustryCost(industry) > ns.corporation.getCorporation().funds) {
+  if (ns.corporation.getIndustryData(industry).startingCost > ns.corporation.getCorporation().funds) {
     ns.print(`Not enough money to expand to ${industry}`)
     return false
   }

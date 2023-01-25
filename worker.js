@@ -112,7 +112,10 @@ function doCompanyWork (ns) {
 function buyOrCreateProgram (ns) {
   ns.print('Check if we need a program')
   const programs = getPrograms(ns)
-  const hasTor = ns.singularity.purchaseTor()
+  if (!ns.hasTorRouter()) {
+    ns.singularity.purchaseTor()
+  }
+  const hasTor = ns.hasTorRouter()
   for (const program of programs) {
     if (program.exists) {
       continue

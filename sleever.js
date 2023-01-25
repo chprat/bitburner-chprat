@@ -1,4 +1,4 @@
-import { getBestCrimeForWork, getPersonaCrimeStats, calculateCrimeSuccessChance, crimeSuccessStats } from 'imports/crimeHelpers.js'
+import { getBestCrimeForWork } from 'imports/crimeHelpers.js'
 import { getCompanies, joinedFaction } from 'imports/factionHelpers.js'
 import { isAugInstalled } from 'imports/augmentationHelpers.js'
 
@@ -38,16 +38,10 @@ function mirrorPlayer (ns, sleeveNo) {
 
 function commitCrime (ns, sleeveNo) {
   let suggestedCrime = getBestCrimeForWork(ns, false, sleeveNo)
-  const p = getPersonaCrimeStats(ns, false, sleeveNo)
-  let c
-  Object.keys(crimeSuccessStats).forEach(function (elem) {
-    if (crimeSuccessStats[elem].name === suggestedCrime) {
-      c = crimeSuccessStats[elem].name
-    }
-  })
-  const suggestedCrimeChance = calculateCrimeSuccessChance(c, p)
+  const p = ns.sleeve.getSleeve(sleeveNo)
+  const suggestedCrimeChance = ns.formulas.work.crimeSuccessChance(p, suggestedCrime)
   if (suggestedCrime === 'Homicide' && suggestedCrimeChance === 1) {
-    if (calculateCrimeSuccessChance(crimeSuccessStats.GrandTheftAuto, p) > 0.4) {
+    if (ns.formulas.work.crimeSuccessChance(p, 'Grand Theft Auto') > 0.4) {
       suggestedCrime = 'Grand Theft Auto'
     }
   }

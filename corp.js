@@ -66,7 +66,7 @@ async function smallTownAchievement (ns) {
   if (officeUpgradeCost < moneyAvail) {
     ns.print('(smalltown) Extend the office')
     ns.corporation.upgradeOfficeSize(divisionName, cityName, officeUpgradeSize)
-    while (ns.corporation.hireEmployee(divisionName, cityName) !== undefined) {
+    while (ns.corporation.hireEmployee(divisionName, cityName)) {
       await ns.sleep(1000)
     }
     const newEmployeesNo = ns.corporation.getOffice(divisionName, cityName).employees.length
@@ -317,7 +317,7 @@ async function raiseDivision (ns, division) {
     if (officeUpgradeCost < moneyAvail) {
       ns.print('Extend the office')
       ns.corporation.upgradeOfficeSize(division, city.name, officeUpgradeSize)
-      while (ns.corporation.hireEmployee(division, city.name) !== undefined) {
+      while (ns.corporation.hireEmployee(division, city.name)) {
         await ns.sleep(1000)
       }
       const newEmployeesNo = ns.corporation.getOffice(division, city.name).employees.length
@@ -355,7 +355,7 @@ async function assignEmployees (ns) {
   for (const divisionName of ns.corporation.getCorporation().divisions) {
     const division = ns.corporation.getDivision(divisionName)
     for (const city of division.cities) {
-      while (ns.corporation.hireEmployee(division.name, city) !== undefined) {
+      while (ns.corporation.hireEmployee(division.name, city)) {
         await ns.sleep(1000)
       }
       const officeData = ns.corporation.getOffice(division.name, city)

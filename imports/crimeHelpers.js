@@ -74,7 +74,7 @@ export function getPersonaCrimeStats (ns, isPlayer, sleeveNo = -1) {
     p.crime_success_mult = ns.getPlayer().mults.crime_success
     return p
   } else {
-    const p = ns.sleeve.getSleeveStats(sleeveNo)
+    const p = ns.sleeve.getSleeve(sleeveNo)
     p.intelligence = ns.getPlayer().skills.intelligence
     p.crime_success_mult = ns.sleeve.getInformation(sleeveNo).mult.crimeSuccess
     return p

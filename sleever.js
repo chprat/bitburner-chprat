@@ -135,7 +135,7 @@ function hacking (ns, sleeveNo) {
 export async function main (ns) {
   const sleeveAmount = ns.sleeve.getNumSleeves()
   for (let i = 0; i < sleeveAmount; i++) {
-    const sleeveStats = ns.sleeve.getSleeveStats(i)
+    const sleeveStats = ns.sleeve.getSleeve(i)
     if (sleeveStats.shock > 0) {
       ns.sleeve.setToShockRecovery(i)
       continue

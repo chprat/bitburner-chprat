@@ -50,12 +50,12 @@ function hashes (ns) {
   const corpFundUpgrade = upgrades.filter(s => s.includes('Corporation Funds')).toString()
   const corpResearchUpgrade = upgrades.filter(s => s.includes('Corporation Research')).toString()
   const moneyUpgrade = upgrades.filter(s => s.includes('Sell for Money')).toString()
-  if (ns.corporation.hasCorporation() && !ns.corporation.getCorporation().public) {
-    if ((ns.hacknet.getHashUpgradeLevel(corpFundUpgrade) < 100) && (ns.hacknet.numHashes() >= ns.hacknet.hashCost(corpFundUpgrade))) {
+  if (ns.corporation.hasCorporation()) {
+    if ((ns.hacknet.getHashUpgradeLevel(corpFundUpgrade) < 10) && (ns.hacknet.numHashes() >= ns.hacknet.hashCost(corpFundUpgrade))) {
       ns.hacknet.spendHashes(corpFundUpgrade)
       ns.print('Spent hashes for corporation funds.')
     }
-    if ((ns.hacknet.getHashUpgradeLevel(corpResearchUpgrade) < 100) && (ns.hacknet.numHashes() >= ns.hacknet.hashCost(corpResearchUpgrade))) {
+    if ((ns.hacknet.getHashUpgradeLevel(corpResearchUpgrade) < 10) && (ns.hacknet.numHashes() >= ns.hacknet.hashCost(corpResearchUpgrade))) {
       ns.hacknet.spendHashes(corpResearchUpgrade)
       ns.print('Spent money for corporation research.')
     }

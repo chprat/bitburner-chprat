@@ -335,8 +335,8 @@ async function raiseDivision (ns, division) {
 }
 
 function enableSmartSupply (ns) {
-  const divisions = ns.corporation.getCorporation().divisions
-  for (const division of divisions) {
+  for (const divisionName of ns.corporation.getCorporation().divisions) {
+    const division = ns.corporation.getDivision(divisionName)
     for (const city of division.cities) {
       if (!ns.corporation.getWarehouse(division.name, city).smartSupplyEnabled) {
         if (ns.corporation.hasWarehouse(division.name, city)) {
@@ -352,8 +352,8 @@ function enableSmartSupply (ns) {
 }
 
 async function assignEmployees (ns) {
-  const divisions = ns.corporation.getCorporation().divisions
-  for (const division of divisions) {
+  for (const divisionName of ns.corporation.getCorporation().divisions) {
+    const division = ns.corporation.getDivision(divisionName)
     for (const city of division.cities) {
       while (ns.corporation.hireEmployee(division.name, city) !== undefined) {
         await ns.sleep(1000)
@@ -389,8 +389,8 @@ async function assignEmployees (ns) {
 }
 
 function buyFirstAdVert (ns) {
-  const divisions = ns.corporation.getCorporation().divisions
-  for (const division of divisions) {
+  for (const divisionName of ns.corporation.getCorporation().divisions) {
+    const division = ns.corporation.getDivision(divisionName)
     if (ns.corporation.getHireAdVertCount(division.name) === 0) {
       if (ns.corporation.getHireAdVertCost(division.name) <= ns.corporation.getCorporation().funds) {
         ns.corporation.hireAdVert(division.name)
@@ -572,7 +572,8 @@ async function upgradeMainOfficeSize (ns, divisionName, newSize) {
 }
 
 function hasIndustry (ns, industry) {
-  for (const division of ns.corporation.getCorporation().divisions) {
+  for (const divisionName of ns.corporation.getCorporation().divisions) {
+    const division = ns.corporation.getDivision(divisionName)
     if (division.type === industry) {
       return true
     }
@@ -730,7 +731,8 @@ export async function main (ns) {
     checkInvestmentOffer(ns, 4)
     checkInvestmentOffer(ns, 5)
     const corp = ns.corporation.getCorporation()
-    for (const division of corp.divisions) {
+    for (const divisionName of corp.divisions) {
+      const division = ns.corporation.getDivision(divisionName)
       expandCities(ns, division.name)
       research(ns, division.name)
       purchaseWarehouses(ns, division.name)

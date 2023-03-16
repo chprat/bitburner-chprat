@@ -52,9 +52,10 @@ export async function onHome (ns) {
     { name: 'joiner.js', threads: 1, mem: 0 },
     { name: 'buyer.js', threads: 1, mem: 0 },
     { name: 'hacknet.js', threads: 1, mem: 0 },
-    { name: 'autoRestarter.js', threads: 1, mem: 0 }
+    { name: 'autoRestarter.js', threads: 1, mem: 0 },
+    { name: 'bladeburner.js', threads: 0, mem: 0 }
   ]
-  const optionalScripts = ['trader.js', 'corp.js']
+  const optionalScripts = ['trader.js', 'corp.js', 'bladeburner.js']
   const waitForScripts = [
     'bootstrapper.js',
     'solver.js',

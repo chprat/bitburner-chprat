@@ -1,0 +1,19 @@
+{
+    "include": [
+        "NetscriptDefinitions.d.ts",
+        "global.d.ts",
+        "src/**/*",
+    ],
+    "compilerOptions": {
+        "rootDir": "src/",
+        "baseUrl": "src/",
+        "paths": {
+            "/*": [
+            "*"
+            ],
+            "@ns": [
+            "../NetscriptDefinitions.d.ts"
+            ]
+        }
+    }
+}

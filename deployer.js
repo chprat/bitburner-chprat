@@ -98,6 +98,9 @@ export async function onHome (ns) {
   scripts.find(e => e.name === 'hacker.js').threads = (hackThreads > 1) ? hackThreads : 1
   for (const script of scripts) {
     if (!ns.scriptRunning(script.name, 'home')) {
+      if (script.name === 'trader.js') {
+        continue
+      }
       if (script.threads > 0) {
         let pid
         if (waitForScripts.includes(script.name)) {

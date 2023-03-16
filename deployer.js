@@ -140,7 +140,7 @@ export async function main (ns) {
   if (script !== undefined) {
     const servers = listServers(ns).filter(s => s !== 'darkweb')
       .filter(s => s !== 'home')
-      .filter(s => !s.includes('hacknet-node'))
+      .filter(s => !s.includes('hacknet-server'))
     for (const serverName of servers) {
       deploy(ns, serverName, script, threads, restart, scriptArgs)
     }
@@ -148,7 +148,7 @@ export async function main (ns) {
     while (true) {
       const servers = listServers(ns).filter(s => s !== 'darkweb')
         .filter(s => s !== 'home')
-        .filter(s => !s.includes('hacknet-node'))
+        .filter(s => !s.includes('hacknet-server'))
       await onHome(ns)
       for (const serverName of servers) {
         await deploy(ns, serverName, '/imports/scanner.js', -1)

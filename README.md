@@ -28,3 +28,4 @@ Sources I used for the scripts
 * https://github.com/bitburner-official/bitburner-scripts
 * https://raw.githubusercontent.com/adamadair/bitburner/main/scripts/contract-auto-solver.js
 * https://steamcommunity.com/sharedfiles/filedetails/?id=2775214434
+* https://github.com/tomdunning/bitburner-solutions

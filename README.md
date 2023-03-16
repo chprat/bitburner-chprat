@@ -16,10 +16,10 @@ By passing the ``-f`` argument potentially fixable issues are fixed automaticall
 Links
 =====
 
-* [Bitburner documentation](https://bitburner.readthedocs.io/en/latest/)
-* [Bitburner scripting language](https://github.com/danielyxie/bitburner/blob/dev/markdown/bitburner.ns.md)
+* [Bitburner documentation](https://bitburner-official.readthedocs.io/en/latest/)
+* [Bitburner scripting language](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md)
 * [VSCode integration](https://marketplace.visualstudio.com/items?itemName=bitburner.bitburner-vscode-integration)
-* [ESLint Docker container](https://hub.docker.com/r/cytopia/eslint)
+* [ESLint Docker container](https://hub.docker.com/r/pipelinecomponents/eslint)
 
 Sources I used for the scripts
 ------------------------------

@@ -20,10 +20,10 @@ export async function hack (ns, serverName) {
   } else if (server.moneyAvailable < moneyThresh) {
     await ns.grow(serverName)
     const newCurrentMoney = ns.getServerMoneyAvailable(serverName)
-    ns.print(`${serverName} growed by ${ns.nFormat(newCurrentMoney - server.moneyAvailable, '$0.000a')} to ${ns.nFormat(newCurrentMoney, '$0.000a')} in ${ns.tFormat(ns.getGrowTime(serverName))}`)
+    ns.print(`${serverName} growed by $${ns.formatNumber(newCurrentMoney - server.moneyAvailable)} to $${ns.formatNumber(newCurrentMoney)} in ${ns.tFormat(ns.getGrowTime(serverName))}`)
   } else {
     const hacked = await ns.hack(serverName)
-    ns.print(`${serverName} hacked by ${ns.nFormat(hacked, '$0.000a')} to ${ns.nFormat(ns.getServerMoneyAvailable(serverName), '$0.000a')} in ${ns.tFormat(ns.getHackTime(serverName))}`)
+    ns.print(`${serverName} hacked by $${ns.formatNumber(hacked)} to $${ns.formatNumber(ns.getServerMoneyAvailable(serverName))} in ${ns.tFormat(ns.getHackTime(serverName))}`)
   }
 }
 

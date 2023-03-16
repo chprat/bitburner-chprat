@@ -9,9 +9,9 @@ export async function main (ns) {
     const ramSize = 2 ** 10
     if (ns.getPurchasedServerCost(ramSize) < ns.getPlayer().money) {
       const name = ns.purchaseServer('psrv', ramSize)
-      ns.print(`Bought server ${name} with ${ns.nFormat((ramSize) * 1000 * 1000 * 1000, '0b')} RAM for ${ns.nFormat(ns.getPurchasedServerCost(ramSize), '$0.000a')}`)
+      ns.print(`Bought server ${name} with ${ns.formatRam(ramSize)} RAM for $${ns.formatNumber(ns.getPurchasedServerCost(ramSize))}`)
     } else {
-      ns.print(`Not enough money to buy a new server with ${ns.nFormat((ramSize) * 1000 * 1000 * 1000, '0b')} RAM (need ${ns.nFormat(ns.getPurchasedServerCost(ramSize), '$0.000a')})`)
+      ns.print(`Not enough money to buy a new server with ${ns.formatRam(ramSize)} RAM (need $${ns.formatNumber(ns.getPurchasedServerCost(ramSize))})`)
     }
   } else {
     const ramSize = ns.getPurchasedServerMaxRam()
@@ -37,13 +37,13 @@ export async function main (ns) {
           if (name === '') {
             ns.print("Couldn't buy a new server!")
           } else {
-            ns.print(`Bought server ${name} with ${ns.nFormat((ramSize) * 1000 * 1000 * 1000, '0b')} RAM for ${ns.nFormat(ns.getPurchasedServerCost(ramSize), '$0.000a')}`)
+            ns.print(`Bought server ${name} with ${ns.formatRam(ramSize)} RAM for $${ns.formatNumber(ns.getPurchasedServerCost(ramSize))}`)
           }
           break
         }
       }
     } else {
-      ns.print(`Not enough money to buy a new server with ${ns.nFormat((ramSize) * 1000 * 1000 * 1000, '0b')} RAM (need ${ns.nFormat(ns.getPurchasedServerCost(ramSize), '$0.000a')})`)
+      ns.print(`Not enough money to buy a new server with ${ns.formatRam(ramSize)} RAM (need $${ns.formatNumber(ns.getPurchasedServerCost(ramSize))})`)
     }
   }
 }

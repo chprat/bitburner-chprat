@@ -14,4 +14,3 @@ do
 done
 
 docker run --rm -v $(pwd):/code pipelinecomponents/eslint eslint . --color $args
-

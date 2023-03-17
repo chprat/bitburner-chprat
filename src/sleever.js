@@ -46,8 +46,11 @@ function commitCrime (ns, sleeveNo) {
     }
   }
   const crime = (ns.heart.break() > -54000) ? 'Homicide' : suggestedCrime
-  if (!ns.sleeve.setToCommitCrime(sleeveNo, crime)) {
-    ns.print(`Couldn't set sleeve ${sleeveNo} to commit crime ${crime}`)
+  const currentCrime = ns.sleeve.getTask(sleeveNo) ? ns.sleeve.getTask(sleeveNo).crimeType : 'null'
+  if (currentCrime !== crime) {
+    if (!ns.sleeve.setToCommitCrime(sleeveNo, crime)) {
+      ns.print(`Couldn't set sleeve ${sleeveNo} to commit crime ${crime}`)
+    }
   }
 }
 

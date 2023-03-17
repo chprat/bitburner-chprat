@@ -14,6 +14,9 @@ function workFor (ns) {
   if (isAugInstalled(ns, "The Blade's Simulacrum")) {
     return true
   }
+  if (ns.getPlayer().bitNodeN === 7) {
+    return true
+  }
   const bonusTime = ns.bladeburner.getBonusTime()
   if (bonusTime > 1000) {
     ns.print(`We have some bonus time, continuing... (${bonusTime})`)

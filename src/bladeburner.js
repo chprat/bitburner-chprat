@@ -78,16 +78,12 @@ function getWorkTask (ns) {
     const _contractName = contract
     const _remainingContractCount = ns.bladeburner.getActionCountRemaining('Contract', _contractName)
     const _contractSuccessChance = ns.bladeburner.getActionEstimatedSuccessChance('Contract', _contractName)
-    if (contractName === '') {
+    if (remainingContractCount === 0 || remainingContractCount < _remainingContractCount) {
       contractName = _contractName
       contractSuccessChance = _contractSuccessChance
       remainingContractCount = _remainingContractCount
-      continue
     }
-    if (remainingContractCount < _remainingContractCount) {
-      contractName = _contractName
-      contractSuccessChance = _contractSuccessChance
-      remainingContractCount = _remainingContractCount
+    if (remainingContractCount > 50) {
       break
     }
   }

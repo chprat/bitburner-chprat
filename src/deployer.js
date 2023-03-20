@@ -153,11 +153,11 @@ export async function main (ns) {
       const servers = listServers(ns).filter(s => s !== 'darkweb')
         .filter(s => s !== 'home')
         .filter(s => !s.includes('hacknet-server'))
-      await onHome(ns)
       for (const serverName of servers) {
         await deploy(ns, serverName, '/imports/scanner.js', -1)
         await deploy(ns, serverName, 'hacker.js', 0)
       }
+      await onHome(ns)
       const sleepTime = (Math.floor(ns.getTimeSinceLastAug() / (1000 * 60)) < 30) ? 60000 : 600000
       await ns.sleep(sleepTime)
     }

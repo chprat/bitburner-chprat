@@ -1,4 +1,6 @@
-import { isAugInstalled } from 'imports/augmentationHelpers.js'
+export function isAugInstalled (ns, aug) {
+  return ns.singularity.getOwnedAugmentations(false).includes(aug)
+}
 
 function joinBladeburner (ns) {
   if (!ns.bladeburner.inBladeburner()) {

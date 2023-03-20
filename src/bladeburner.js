@@ -121,7 +121,8 @@ function spendSkillPoints (ns) {
     }
     skills.push({ name: skill, level: skillLevel })
   }
-  skills = skills.sort((a, b) => a.level - b.level)
+  const minLevel = Math.min(...skills.map(e => e.level))
+  skills = skills.filter(e => e.level === minLevel)
   for (const skill of skills) {
     const levelCount = 1
     const upgradeCost = ns.bladeburner.getSkillUpgradeCost(skill.name, levelCount)

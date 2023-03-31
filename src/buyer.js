@@ -54,13 +54,13 @@ function buyAugmentations (ns, necessary = true) {
       }
     }
     if (!hasMoney) {
-      ns.print(`Not enough money for ${openAugmentation.name}`)
+      ns.print(`Not enough money for ${openAugmentation.name} from ${openAugmentation.faction}`)
     }
     if (!hasRep) {
-      ns.print(`Not enough reputation for ${openAugmentation.name}`)
+      ns.print(`Not enough reputation for ${openAugmentation.name} from ${openAugmentation.faction}`)
     }
     if (!hasPreReqs) {
-      ns.print(`Missing requirements for ${openAugmentation.name}`)
+      ns.print(`Missing requirements for ${openAugmentation.name} from ${openAugmentation.faction}`)
     }
     if (!hasPreReqs) {
       continue

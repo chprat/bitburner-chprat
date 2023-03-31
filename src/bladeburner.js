@@ -156,7 +156,10 @@ export async function main (ns) {
     stopWork(ns)
     const [workType, workTask] = getWorkTask(ns)
     const currentWork = ns.bladeburner.getCurrentAction()
-    if (currentWork.type !== workType || currentWork.name !== workTask) {
+    const actionTime = ns.bladeburner.getActionTime(currentWork.type, currentWork.name)
+    const currentActionTime = ns.bladeburner.getActionCurrentTime()
+    const currentActionDoneRatio = currentActionTime / actionTime
+    if ((currentWork.type !== workType || currentWork.name !== workTask) && (currentActionDoneRatio < 0.5)) {
       ns.bladeburner.startAction(workType, workTask)
     }
     spendSkillPoints(ns)

@@ -52,7 +52,7 @@ async function smallTownAchievement (ns) {
     return
   }
 
-  const currentEmployeesNo = ns.corporation.getOffice(divisionName, cityName).employees.length
+  const currentEmployeesNo = ns.corporation.getOffice(divisionName, cityName).employees
   if (currentEmployeesNo > 3000) {
     ns.print(`We already have more than 3000 employees in ${divisionName}s ${cityName} office`)
     return
@@ -69,7 +69,7 @@ async function smallTownAchievement (ns) {
     while (ns.corporation.hireEmployee(divisionName, cityName)) {
       await ns.sleep(1000)
     }
-    const newEmployeesNo = ns.corporation.getOffice(divisionName, cityName).employees.length
+    const newEmployeesNo = ns.corporation.getOffice(divisionName, cityName).employees
     const employeesPerJob = newEmployeesNo / 5
     await ns.corporation.setAutoJobAssignment(divisionName, cityName, 'Training', 0)
     await ns.corporation.setAutoJobAssignment(divisionName, cityName, 'Operations', employeesPerJob)
@@ -285,7 +285,7 @@ async function raiseDivision (ns, division) {
   const officeStats = []
   for (const city of cities) {
     const stats = { name: city, employees: 0 }
-    stats.employees = ns.corporation.getOffice(division, city).employees.length
+    stats.employees = ns.corporation.getOffice(division, city).employees
     officeStats.push(stats)
   }
 
@@ -299,7 +299,7 @@ async function raiseDivision (ns, division) {
     city = officeStats.filter(e => e.name === mainCity)[0]
   }
 
-  const officeUpgradeSize = (ns.corporation.getOffice(division, city.name).employees.length < 15) ? 3 : 15
+  const officeUpgradeSize = (ns.corporation.getOffice(division, city.name).employees < 15) ? 3 : 15
   const moneyAvail = ns.corporation.getCorporation().funds
   const officeUpgradeCost = ns.corporation.getOfficeSizeUpgradeCost(division, city.name, officeUpgradeSize)
   const adVertUpgradeCost = ns.corporation.getHireAdVertCost(division)
@@ -320,8 +320,8 @@ async function raiseDivision (ns, division) {
       while (ns.corporation.hireEmployee(division, city.name)) {
         await ns.sleep(1000)
       }
-      const newEmployeesNo = ns.corporation.getOffice(division, city.name).employees.length
-      const employeesPerJob = newEmployeesNo / 5
+      const newEmployeesNo = ns.corporation.getOffice(division, city.name).employees
+      const employeesPerJob = Math.floor(newEmployeesNo / 5)
       await ns.corporation.setAutoJobAssignment(division, city.name, 'Training', 0)
       await ns.corporation.setAutoJobAssignment(division, city.name, 'Operations', employeesPerJob)
       await ns.corporation.setAutoJobAssignment(division, city.name, 'Engineer', employeesPerJob)

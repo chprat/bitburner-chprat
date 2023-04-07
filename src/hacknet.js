@@ -18,6 +18,10 @@ export async function upgrade (ns, nodeId) {
     return false
   }
   const newNodeCost = ns.hacknet.getPurchaseNodeCost()
+  if ((newNodeCost === Infinity) && (nodeId !== 0)) {
+    ns.print('All servers bought, only upgrade the first one')
+    return false
+  }
   if (availUpgrades[0].cost > newNodeCost) {
     ns.print(`Upgrades to expensive for ${nodeId}, prefer buying a new node instead`)
     if ((newNodeCost < newNodeMaxCost) && (ns.getPlayer().money > newNodeCost)) {

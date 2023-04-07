@@ -165,7 +165,7 @@ async function killAndKarma (ns) {
     await ns.sleep(10000)
   }
   const currentWork = ns.singularity.getCurrentWork()
-  if (ns.singularity.isBusy() && currentWork.type === 'CRIME' && currentWork.crimeType === 'HOMICIDE') {
+  if (ns.singularity.isBusy() && currentWork.type === 'CRIME' && currentWork.crimeType === 'Homicide') {
     ns.singularity.stopAction()
   }
 }

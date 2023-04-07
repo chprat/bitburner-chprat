@@ -53,6 +53,9 @@ function getBlackOps (ns) {
     blackOps.push(blackOp)
   }
   const blackOp = blackOps.sort((a, b) => a.rank - b.rank).filter(e => e.remainingCount !== 0)[0]
+  if (!blackOp) {
+    return false
+  }
   const currentRank = ns.bladeburner.getRank()
   if (blackOp.rank > currentRank) {
     ns.print(`BlackOp ${blackOp.name} requires rank ${blackOp.rank}, we only have ${currentRank}`)

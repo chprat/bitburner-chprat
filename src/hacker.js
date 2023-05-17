@@ -1,7 +1,7 @@
 import { listServers } from 'imports/scanner.js'
 
 /** @param {NS} ns **/
-export async function hack (ns, serverName) {
+async function hack (ns, serverName) {
   const server = ns.getServer(serverName)
   if (!server.hasAdminRights) {
     return

@@ -1,7 +1,7 @@
 import { listServers } from 'imports/scanner.js'
 
 /** @param {NS} ns **/
-export async function deploy (ns, serverName, scriptName, threads, restart, ...scriptArgs) {
+async function deploy (ns, serverName, scriptName, threads, restart, ...scriptArgs) {
   if (ns.hasRootAccess(serverName)) {
     const running = ns.scriptRunning(scriptName, serverName)
     if (running && restart !== 'y') {
@@ -24,7 +24,7 @@ export async function deploy (ns, serverName, scriptName, threads, restart, ...s
 }
 
 /** @param {NS} ns **/
-export async function runAndWait (ns, script, server) {
+async function runAndWait (ns, script, server) {
   const pid = ns.run(script.name, script.threads)
   if (pid === 0) {
     ns.print(`Error running script ${script.name}`)
@@ -37,7 +37,7 @@ export async function runAndWait (ns, script, server) {
 }
 
 /** @param {NS} ns **/
-export async function onHome (ns) {
+async function onHome (ns) {
   const scripts = [
     { name: 'bootstrapper.js', threads: 1, mem: 0 },
     { name: 'rooter.js', threads: 1, mem: 0 },

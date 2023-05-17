@@ -1,7 +1,7 @@
 import { listServers } from 'imports/scanner.js'
 
 /** @param {NS} ns **/
-export async function files (ns, server) {
+async function files (ns, server) {
   if (!ns.hasRootAccess(server)) {
     return
   }

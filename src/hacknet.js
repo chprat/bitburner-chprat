@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-export async function upgrade (ns, nodeId) {
+async function upgrade (ns, nodeId) {
   const newNodeMaxCost = 76000000
   const upgrades = [{ type: 'ram', cost: 0 },
     { type: 'core', cost: 0 },

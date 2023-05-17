@@ -1,7 +1,4 @@
-/** @param {NS} ns **/
-export function isAugInstalled (ns, aug) {
-  return ns.singularity.getOwnedAugmentations(false).includes(aug)
-}
+import { isAugInstalled } from 'imports/augmentationHelpers.js'
 
 /** @param {NS} ns **/
 function joinBladeburner (ns) {

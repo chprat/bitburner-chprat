@@ -1,7 +1,9 @@
+/** @param {NS} ns **/
 async function sleepOneCycle (ns) {
   await ns.sleep(10 * 1000)
 }
 
+/** @param {NS} ns **/
 function getProductData (ns, division) {
   const productData = []
   for (const product of division.products) {
@@ -10,6 +12,7 @@ function getProductData (ns, division) {
   return productData
 }
 
+/** @param {NS} ns **/
 function getLowestProduct (ns, division) {
   if (division.products.length === 0) {
     return undefined
@@ -20,6 +23,7 @@ function getLowestProduct (ns, division) {
   return lowestProduct
 }
 
+/** @param {NS} ns **/
 function isDevelopingProduct (ns, division) {
   for (const product of getProductData(ns, division)) {
     if (product.developmentProgress < 100) {
@@ -31,6 +35,7 @@ function isDevelopingProduct (ns, division) {
   return false
 }
 
+/** @param {NS} ns **/
 function tryCreateCorp (ns) {
   const success = ns.corporation.createCorporation(corpName)
   if (success) {
@@ -42,6 +47,7 @@ function tryCreateCorp (ns) {
   }
 }
 
+/** @param {NS} ns **/
 async function smallTownAchievement (ns) {
   const divisionName = 'Toba'
   const cityName = 'Aevum'
@@ -82,6 +88,7 @@ async function smallTownAchievement (ns) {
   }
 }
 
+/** @param {NS} ns **/
 function getFreeProductName (ns, division) {
   for (let i = 0; i < division.products.length + 1; i++) {
     const prodName = division.name.concat((i + 1).toString())
@@ -93,6 +100,7 @@ function getFreeProductName (ns, division) {
   }
 }
 
+/** @param {NS} ns **/
 async function developNewProduct (ns, division, productName) {
   ns.print(`Develop new product ${productName} in ${division.name}`)
   try {
@@ -116,6 +124,7 @@ async function developNewProduct (ns, division, productName) {
   }
 }
 
+/** @param {NS} ns **/
 async function thrashProductAndDevelopNew (ns, division) {
   const lowestProduct = getLowestProduct(ns, division)
   if (lowestProduct === undefined) {
@@ -128,6 +137,7 @@ async function thrashProductAndDevelopNew (ns, division) {
   await developNewProduct(ns, division, lowestProduct.name)
 }
 
+/** @param {NS} ns **/
 function maxConcurrentProducts (ns, division) {
   if (ns.corporation.hasResearched(division.name, researchNames.cap2)) {
     return 5
@@ -138,6 +148,7 @@ function maxConcurrentProducts (ns, division) {
   }
 }
 
+/** @param {NS} ns **/
 function hasMaxProducts (ns, division) {
   const concurrentProducts = maxConcurrentProducts(ns, division)
   const maxedProducts = (division.products.length === concurrentProducts)
@@ -145,6 +156,7 @@ function hasMaxProducts (ns, division) {
   return maxedProducts
 }
 
+/** @param {NS} ns **/
 async function findBestPrice (ns, division, product) {
   let multi = 1
   ns.print(`Trying to find the best price of ${product.name} of ${division.name}`)
@@ -163,6 +175,7 @@ async function findBestPrice (ns, division, product) {
   ns.corporation.sellProduct(division.name, mainCity, product.name, 'MAX', 'MP*'.concat(multi.toString()), true)
 }
 
+/** @param {NS} ns **/
 async function setProductSales (ns, division) {
   const products = getProductData(ns, division)
   for (const product of products) {
@@ -186,14 +199,17 @@ async function setProductSales (ns, division) {
   }
 }
 
+/** @param {NS} ns **/
 function hasAPIAccess (ns) {
   return ns.corporation.hasUnlockUpgrade('Warehouse API') & ns.corporation.hasUnlockUpgrade('Office API')
 }
 
+/** @param {NS} ns **/
 function expandedToAllCities (ns, division) {
   return ns.corporation.getDivision(division).cities.length === cities.length
 }
 
+/** @param {NS} ns **/
 function expandCities (ns, division) {
   if (expandedToAllCities(ns, division)) {
     ns.print(`${division} already expanded to all cities`)
@@ -214,6 +230,7 @@ function expandCities (ns, division) {
   return true
 }
 
+/** @param {NS} ns **/
 function purchasedAllWarehouses (ns, division) {
   const existingCities = ns.corporation.getDivision(division).cities
   for (const city of existingCities) {
@@ -224,6 +241,7 @@ function purchasedAllWarehouses (ns, division) {
   return true
 }
 
+/** @param {NS} ns **/
 function purchaseWarehouses (ns, division) {
   if (!expandedToAllCities(ns, division)) {
     ns.print(`${division} not expanded to all cities, not purchasing warehouses`)
@@ -248,6 +266,7 @@ function purchaseWarehouses (ns, division) {
   return true
 }
 
+/** @param {NS} ns **/
 function raisedDivision (ns, division) {
   const { CorporationValuation } = ns.getBitNodeMultipliers()
   const employeeScalingFactor = 1 / CorporationValuation
@@ -266,6 +285,7 @@ function raisedDivision (ns, division) {
   return true
 }
 
+/** @param {NS} ns **/
 async function raiseDivision (ns, division) {
   if (!expandedToAllCities(ns, division)) {
     ns.print(`${division} not expanded to all cities, not raising it`)
@@ -334,6 +354,7 @@ async function raiseDivision (ns, division) {
   }
 }
 
+/** @param {NS} ns **/
 function enableSmartSupply (ns) {
   for (const divisionName of ns.corporation.getCorporation().divisions) {
     const division = ns.corporation.getDivision(divisionName)
@@ -351,6 +372,7 @@ function enableSmartSupply (ns) {
   return true
 }
 
+/** @param {NS} ns **/
 async function assignEmployees (ns) {
   for (const divisionName of ns.corporation.getCorporation().divisions) {
     const division = ns.corporation.getDivision(divisionName)
@@ -388,6 +410,7 @@ async function assignEmployees (ns) {
   }
 }
 
+/** @param {NS} ns **/
 function buyFirstAdVert (ns) {
   for (const divisionName of ns.corporation.getCorporation().divisions) {
     const division = ns.corporation.getDivision(divisionName)
@@ -403,6 +426,7 @@ function buyFirstAdVert (ns) {
   return true
 }
 
+/** @param {NS} ns **/
 function upgradeStorageSize (ns, division, size) {
   for (const city of cities) {
     if (!ns.corporation.hasWarehouse(division, city)) {
@@ -421,6 +445,7 @@ function upgradeStorageSize (ns, division, size) {
   return true
 }
 
+/** @param {NS} ns **/
 function sellMaterials (ns, divisionName) {
   const division = ns.corporation.getDivision(divisionName)
   for (const city of division.cities) {
@@ -432,6 +457,7 @@ function sellMaterials (ns, divisionName) {
   }
 }
 
+/** @param {NS} ns **/
 function doUpgrade (ns, upgradeName, targetLevel) {
   const currentLevel = ns.corporation.getUpgradeLevel(upgradeName)
   if (currentLevel >= targetLevel) {
@@ -446,6 +472,7 @@ function doUpgrade (ns, upgradeName, targetLevel) {
   return true
 }
 
+/** @param {NS} ns **/
 function buyFirstUpgrades (ns) {
   const upgrades = ['FocusWires', 'Neural Accelerators', 'Speech Processor Implants', 'Nuoptimal Nootropic Injector Implants', 'Smart Factories']
   for (let i = 1; i <= 2; i++) {
@@ -458,6 +485,7 @@ function buyFirstUpgrades (ns) {
   return true
 }
 
+/** @param {NS} ns **/
 async function buyMaterial (ns, divisionName, cityName, materialName, amount) {
   const material = ns.corporation.getMaterial(divisionName, cityName, materialName)
   const missingMat = amount - material.qty
@@ -477,6 +505,7 @@ async function buyMaterial (ns, divisionName, cityName, materialName, amount) {
   return true
 }
 
+/** @param {NS} ns **/
 async function buyMaterials (ns, divisionName, stage) {
   const materials = {
     1: {
@@ -511,6 +540,7 @@ async function buyMaterials (ns, divisionName, stage) {
   return true
 }
 
+/** @param {NS} ns **/
 function checkInvestmentOffer (ns, round) {
   const { CorporationValuation } = ns.getBitNodeMultipliers()
   const offers = {
@@ -539,6 +569,7 @@ function checkInvestmentOffer (ns, round) {
   }
 }
 
+/** @param {NS} ns **/
 async function upgradeOfficeSize (ns, divisionName, newSize) {
   const division = ns.corporation.getDivision(divisionName)
   for (const city of division.cities) {
@@ -556,6 +587,7 @@ async function upgradeOfficeSize (ns, divisionName, newSize) {
   return true
 }
 
+/** @param {NS} ns **/
 async function upgradeMainOfficeSize (ns, divisionName, newSize) {
   const division = ns.corporation.getDivision(divisionName)
   const currentSize = ns.corporation.getOffice(division.name, mainCity).size
@@ -571,6 +603,7 @@ async function upgradeMainOfficeSize (ns, divisionName, newSize) {
   return true
 }
 
+/** @param {NS} ns **/
 function hasIndustry (ns, industry) {
   for (const divisionName of ns.corporation.getCorporation().divisions) {
     const division = ns.corporation.getDivision(divisionName)
@@ -581,6 +614,7 @@ function hasIndustry (ns, industry) {
   return false
 }
 
+/** @param {NS} ns **/
 function expandIndustry (ns, industry, name) {
   if (hasIndustry(ns, industry)) {
     return true
@@ -593,6 +627,7 @@ function expandIndustry (ns, industry, name) {
   return true
 }
 
+/** @param {NS} ns **/
 async function initialSetup (ns) {
   if (!purchaseWarehouses(ns, 'Agri')) {
     return false
@@ -659,6 +694,7 @@ async function initialSetup (ns) {
   return true
 }
 
+/** @param {NS} ns **/
 function research (ns, divisionName) {
   const division = ns.corporation.getDivision(divisionName)
   if (!ns.corporation.hasResearched(division.name, researchNames.lab)) {

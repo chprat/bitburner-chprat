@@ -1,3 +1,4 @@
+/** @param {NS} ns **/
 export function getPrograms (ns) {
   ns.print('Check if we need a program')
   const programs = [

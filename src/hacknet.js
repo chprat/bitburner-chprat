@@ -1,3 +1,4 @@
+/** @param {NS} ns **/
 export async function upgrade (ns, nodeId) {
   const newNodeMaxCost = 76000000
   const upgrades = [{ type: 'ram', cost: 0 },
@@ -49,6 +50,7 @@ export async function upgrade (ns, nodeId) {
   return true
 }
 
+/** @param {NS} ns **/
 function hashes (ns) {
   const upgrades = ns.hacknet.getHashUpgrades()
   const corpFundUpgrade = upgrades.filter(s => s.includes('Corporation Funds')).toString()

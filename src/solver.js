@@ -23,6 +23,7 @@ import { lzCompress } from 'imports/lzCompress.js'
 import { caesar } from 'imports/caesar.js'
 import { vigenere } from 'imports/vigenere.js'
 
+/** @param {NS} ns **/
 function solve (type, data, server, contract, ns) {
   let solution = '~'
   switch (type) {

@@ -1,7 +1,9 @@
+/** @param {NS} ns **/
 export function isAugInstalled (ns, aug) {
   return ns.singularity.getOwnedAugmentations(false).includes(aug)
 }
 
+/** @param {NS} ns **/
 function joinBladeburner (ns) {
   if (!ns.bladeburner.inBladeburner()) {
     if (!ns.bladeburner.joinBladeburnerDivision()) {
@@ -15,6 +17,7 @@ function joinBladeburner (ns) {
   return true
 }
 
+/** @param {NS} ns **/
 function workFor (ns) {
   if (isAugInstalled(ns, "The Blade's Simulacrum")) {
     return true
@@ -32,17 +35,20 @@ function workFor (ns) {
   return false
 }
 
+/** @param {NS} ns **/
 function stopWork (ns) {
   if (!isAugInstalled(ns, "The Blade's Simulacrum")) {
     ns.singularity.stopAction()
   }
 }
 
+/** @param {NS} ns **/
 function getStaminaRatio (ns) {
   const [current, max] = ns.bladeburner.getStamina()
   return current / max
 }
 
+/** @param {NS} ns **/
 function getBlackOps (ns) {
   const blackOpNames = ns.bladeburner.getBlackOpNames()
   const blackOps = []
@@ -71,6 +77,7 @@ function getBlackOps (ns) {
   return ['BlackOp', blackOp.name]
 }
 
+/** @param {NS} ns **/
 function getWorkTask (ns) {
   const blackOp = getBlackOps(ns)
   if (blackOp) {
@@ -119,6 +126,7 @@ function getWorkTask (ns) {
   }
 }
 
+/** @param {NS} ns **/
 function spendSkillPoints (ns) {
   const skillNames = ns.bladeburner.getSkillNames()
   let skills = []

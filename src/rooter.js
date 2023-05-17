@@ -1,5 +1,6 @@
 import { listServers } from 'imports/scanner.js'
 
+/** @param {NS} ns **/
 function own (ns, server) {
   let srv = ns.getServer(server)
   const hackingLevel = ns.getHackingLevel()

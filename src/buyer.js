@@ -1,6 +1,7 @@
 import { joinedFaction, getFactionsSortedByMissingRep, getAllFactionsWithMissingAugs, CriminalFactions, EndGameFactions, getFocusFactions } from 'imports/factionHelpers.js'
 import { augIsNecessary, hasMissingAugs, missingAugs, isAugInstalled, hasAugsToInstall } from 'imports/augmentationHelpers.js'
 
+/** @param {NS} ns **/
 function enrichAugmentation (ns, augmentationName, factionName) {
   const aug = { name: '', cost: '', rep: '', preReqs: '', faction: '' }
   aug.name = augmentationName
@@ -18,6 +19,7 @@ function enrichAugmentation (ns, augmentationName, factionName) {
   return aug
 }
 
+/** @param {NS} ns **/
 function buyAugmentations (ns, necessary = true) {
   let openAugmentations = []
   if (joinedFaction(ns, 'Bladeburners') && !hasAugsToInstall(ns) && hasMissingAugs(ns, 'Bladeburners', false)) {

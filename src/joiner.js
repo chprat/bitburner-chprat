@@ -1,6 +1,7 @@
 import { HackingFactions, EarlyFactions, CriminalFactions, EndGameFactions, MegaCorpFactions, amFactions, asFactions, eFactions, joinedFaction, getAllFactionsWithMissingAugs } from 'imports/factionHelpers.js'
 import { hasMissingAugs } from 'imports/augmentationHelpers.js'
 
+/** @param {NS} ns **/
 function progressCityFactions (ns, necessary = true) {
   let workOnAm = false
   let workOnAs = false
@@ -32,6 +33,7 @@ function progressCityFactions (ns, necessary = true) {
   }
 }
 
+/** @param {NS} ns **/
 function joinFactions (ns, factions) {
   let success = false
   for (const fac of factions) {
@@ -55,6 +57,7 @@ function joinFactions (ns, factions) {
   return success
 }
 
+/** @param {NS} ns **/
 async function joinCityFactions (ns, necessary = true) {
   ns.print('Check if we need to join a city faction')
   const factionsToProgress = progressCityFactions(ns, necessary)
@@ -86,6 +89,7 @@ async function joinCityFactions (ns, necessary = true) {
   }
 }
 
+/** @param {NS} ns **/
 async function cityBasedJoining (ns, faction, city, necessary = true) {
   const factionsToProgress = progressCityFactions(ns, necessary)
   if (!hasMissingAugs(ns, faction, necessary)) {
@@ -118,6 +122,7 @@ async function cityBasedJoining (ns, faction, city, necessary = true) {
   }
 }
 
+/** @param {NS} ns **/
 async function joinTianDiHui (ns, necessary = true) {
   const faction = 'Tian Di Hui'
   const city = 'Ishima'
@@ -125,6 +130,7 @@ async function joinTianDiHui (ns, necessary = true) {
   await cityBasedJoining(ns, faction, city, necessary)
 }
 
+/** @param {NS} ns **/
 async function joinTetrads (ns, necessary = true) {
   const faction = 'Tetrads'
   const city = 'Ishima'
@@ -135,6 +141,7 @@ async function joinTetrads (ns, necessary = true) {
   await cityBasedJoining(ns, faction, city, necessary)
 }
 
+/** @param {NS} ns **/
 async function joinTheDarkArmy (ns, necessary = true) {
   const faction = 'The Dark Army'
   const city = 'Chongqing'
@@ -148,6 +155,7 @@ async function joinTheDarkArmy (ns, necessary = true) {
   await cityBasedJoining(ns, faction, city, necessary)
 }
 
+/** @param {NS} ns **/
 async function joinTheSyndicate (ns, necessary = true) {
   const faction = 'The Syndicate'
   const city = 'Aevum'

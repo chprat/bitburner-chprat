@@ -1,3 +1,4 @@
+/** @param {NS} ns **/
 export function getCrimeForWork (ns) {
   let crime = 'Shoplift'
   if (ns.getPlayer().skills.dexterity >= 15) {
@@ -36,6 +37,7 @@ export function getCrimeForWork (ns) {
   return crime
 }
 
+/** @param {NS} ns **/
 export function getBestCrimeForWork (ns, isPlayer, sleeveNo = -1) {
   const p = isPlayer ? ns.getPlayer() : ns.sleeve.getSleeve(sleeveNo)
   const crimes = []

@@ -1,3 +1,4 @@
+/** @param {NS} ns **/
 export function recursiveScan (ns, parent, server, target, route) {
   const children = ns.scan(server)
   for (const child of children) {

@@ -1,5 +1,6 @@
 import { listServers } from 'imports/scanner.js'
 
+/** @param {NS} ns **/
 export async function deploy (ns, serverName, scriptName, threads, restart, ...scriptArgs) {
   if (ns.hasRootAccess(serverName)) {
     const running = ns.scriptRunning(scriptName, serverName)
@@ -22,6 +23,7 @@ export async function deploy (ns, serverName, scriptName, threads, restart, ...s
   }
 }
 
+/** @param {NS} ns **/
 export async function runAndWait (ns, script, server) {
   const pid = ns.run(script.name, script.threads)
   if (pid === 0) {
@@ -34,6 +36,7 @@ export async function runAndWait (ns, script, server) {
   return pid
 }
 
+/** @param {NS} ns **/
 export async function onHome (ns) {
   const scripts = [
     { name: 'bootstrapper.js', threads: 1, mem: 0 },

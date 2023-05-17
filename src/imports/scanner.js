@@ -1,3 +1,4 @@
+/** @param {NS} ns **/
 export function scan (ns, parent, server, list) {
   const children = ns.scan(server)
   for (const child of children) {
@@ -9,6 +10,7 @@ export function scan (ns, parent, server, list) {
   }
 }
 
+/** @param {NS} ns **/
 export function listServers (ns) {
   const list = []
   ns.disableLog('scan')

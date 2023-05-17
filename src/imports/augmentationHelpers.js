@@ -1,3 +1,4 @@
+/** @param {NS} ns **/
 export function missingAugs (ns, faction, necessary = true) {
   const allAugs = ns.singularity.getAugmentationsFromFaction(faction).filter((elem) => !ns.singularity.getOwnedAugmentations(true).includes(elem))
   const necessaryAugs = allAugs.filter(elem => augIsNecessary(ns, elem))
@@ -7,14 +8,17 @@ export function missingAugs (ns, faction, necessary = true) {
   return allAugs
 }
 
+/** @param {NS} ns **/
 export function hasMissingAugs (ns, faction, necessary = true) {
   return missingAugs(ns, faction, necessary).length !== 0
 }
 
+/** @param {NS} ns **/
 export function isAugInstalled (ns, aug) {
   return ns.singularity.getOwnedAugmentations(true).includes(aug)
 }
 
+/** @param {NS} ns **/
 export function augIsNecessary (ns, aug) {
   let necessary = false
   const necessaryFeatures = [
@@ -52,6 +56,7 @@ export function augIsNecessary (ns, aug) {
   return necessary
 }
 
+/** @param {NS} ns **/
 export function getAllMissingAugs (ns, factions) {
   const missingAugs = []
   for (const faction of factions) {
@@ -73,10 +78,12 @@ export function getAllMissingAugs (ns, factions) {
   return missingAugs.sort((a, b) => (a.name > b.name) ? 1 : -1)
 }
 
+/** @param {NS} ns **/
 export function factionOffersNG (ns, faction) {
   return ns.singularity.getAugmentationsFromFaction(faction).includes('NeuroFlux Governor')
 }
 
+/** @param {NS} ns **/
 export function hasAugsToInstall (ns) {
   const purchasedAugmentations = ns.singularity.getOwnedAugmentations(true)
   const installedAugmentations = ns.singularity.getOwnedAugmentations()

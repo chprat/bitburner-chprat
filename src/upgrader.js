@@ -1,3 +1,4 @@
+/** @param {NS} ns **/
 function upgradePC (ns) {
   const canUpgradeRAM = ns.singularity.getUpgradeHomeRamCost() <= ns.getPlayer().money
   if (canUpgradeRAM) {

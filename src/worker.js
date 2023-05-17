@@ -5,6 +5,7 @@ import { getBestCrimeForWork } from 'imports/crimeHelpers.js'
 
 let focus = true
 
+/** @param {NS} ns **/
 function doFactionWork (ns, necessary = true) {
   ns.print('Check if we need to do faction work')
   const factionsSortedByMissingRep = getFactionsSortedByMissingRep(ns, true, necessary)
@@ -63,6 +64,7 @@ function doFactionWork (ns, necessary = true) {
   }
 }
 
+/** @param {NS} ns **/
 function doCompanyWork (ns) {
   ns.print('Check if we need to do company work')
   let success = false
@@ -109,6 +111,7 @@ function doCompanyWork (ns) {
   }
 }
 
+/** @param {NS} ns **/
 function buyOrCreateProgram (ns) {
   ns.print('Check if we need a program')
   const programs = getPrograms(ns)
@@ -148,6 +151,7 @@ function buyOrCreateProgram (ns) {
   }
 }
 
+/** @param {NS} ns **/
 async function killAndKarma (ns) {
   ns.print('Check if we need to commit some crimes')
   while (ns.getPlayer().numPeopleKilled < 30) {

@@ -1,6 +1,7 @@
 import { recursiveScan } from 'imports/recursiveScan.js'
 import { HackingFactions, MegaCorpFactions } from 'imports/factionHelpers.js'
 
+/** @param {NS} ns **/
 function connectTo (ns, route, server) {
   route.shift()
   for (const node of route) {
@@ -14,6 +15,7 @@ function connectTo (ns, route, server) {
   }
 }
 
+/** @param {NS} ns **/
 async function backdoorServer (ns, server, faction) {
   ns.print(`No backdoor installed on ${server.hostname}`)
   let route = []
@@ -25,6 +27,7 @@ async function backdoorServer (ns, server, faction) {
   connectTo(ns, route, 'home')
 }
 
+/** @param {NS} ns **/
 async function backdoorFactionServers (ns, factions) {
   for (const faction of factions) {
     if (faction.server === '') {

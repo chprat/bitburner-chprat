@@ -1,5 +1,6 @@
 import { listServers } from 'imports/scanner.js'
 
+/** @param {NS} ns **/
 export async function deploy (ns, serverName, scriptName, threads, ...scriptArgs) {
   if (ns.hasRootAccess(serverName)) {
     await ns.scp(scriptName, serverName)

@@ -28,6 +28,7 @@ export const amFactions = ['Sector-12', 'Aevum']
 export const asFactions = ['Chongqing', 'New Tokyo', 'Ishima']
 export const eFactions = ['Volhaven']
 
+/** @param {NS} ns **/
 export function getCompanies (ns) {
   const allCompanies = []
   for (const faction of MegaCorpFactions) {
@@ -36,10 +37,12 @@ export function getCompanies (ns) {
   return allCompanies
 }
 
+/** @param {NS} ns **/
 export function joinedFaction (ns, faction) {
   return ns.getPlayer().factions.includes(faction)
 }
 
+/** @param {NS} ns **/
 export function getFactionsSortedByMissingRep (ns, ascending = true, necessary = true) {
   let factions = []
   for (const faction of ns.getPlayer().factions) {
@@ -63,6 +66,7 @@ export function getFactionsSortedByMissingRep (ns, ascending = true, necessary =
   return factions
 }
 
+/** @param {NS} ns **/
 export function getAllFactions (ns) {
   const allFactions = EarlyFactions.concat(amFactions, asFactions, eFactions, CriminalFactions, EndGameFactions)
   for (const faction of HackingFactions) {
@@ -78,6 +82,7 @@ export function getAllFactions (ns) {
   return allFactions
 }
 
+/** @param {NS} ns **/
 export function getAllFactionsWithMissingAugs (ns, necessary = true) {
   const allFactionsWithMissingAugs = []
   for (const faction of getAllFactions(ns)) {
@@ -88,6 +93,7 @@ export function getAllFactionsWithMissingAugs (ns, necessary = true) {
   return allFactionsWithMissingAugs
 }
 
+/** @param {NS} ns **/
 export function getFactionWithMostRepAndNG (ns) {
   const factions = getFactionsSortedByRep(ns)
   for (const faction of factions) {
@@ -97,6 +103,7 @@ export function getFactionWithMostRepAndNG (ns) {
   }
 }
 
+/** @param {NS} ns **/
 export function getFactionsSortedByRep (ns) {
   const playerFactions = ns.getPlayer().factions
   const factions = []

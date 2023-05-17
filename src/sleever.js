@@ -2,6 +2,7 @@ import { getBestCrimeForWork } from 'imports/crimeHelpers.js'
 import { getCompanies, joinedFaction } from 'imports/factionHelpers.js'
 import { isAugInstalled } from 'imports/augmentationHelpers.js'
 
+/** @param {NS} ns **/
 function mirrorPlayer (ns, sleeveNo) {
   const currentWork = ns.singularity.getCurrentWork()
   if (ns.singularity.isBusy()) {
@@ -36,6 +37,7 @@ function mirrorPlayer (ns, sleeveNo) {
   return false
 }
 
+/** @param {NS} ns **/
 function commitCrime (ns, sleeveNo) {
   let suggestedCrime = getBestCrimeForWork(ns, false, sleeveNo)
   const p = ns.sleeve.getSleeve(sleeveNo)
@@ -54,6 +56,7 @@ function commitCrime (ns, sleeveNo) {
   }
 }
 
+/** @param {NS} ns **/
 function companyWork (ns, sleeveNo) {
   let job = 'IT'
   if (ns.getPlayer().skills.charisma >= 250) {
@@ -107,6 +110,7 @@ function companyWork (ns, sleeveNo) {
   }
 }
 
+/** @param {NS} ns **/
 function hacking (ns, sleeveNo) {
   const factions = ns.getPlayer().factions
   for (const faction of factions) {

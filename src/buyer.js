@@ -1,8 +1,54 @@
 import { joinedFaction, getFactionsSortedByMissingRep, getAllFactionsWithMissingAugs, CriminalFactions, EndGameFactions, getFocusFactions } from 'imports/factionHelpers.js'
-import { augIsNecessary, hasMissingAugs, missingAugs, isAugInstalled } from 'imports/augmentationHelpers.js'
+import { augIsNecessary, hasMissingAugs, missingAugs, isAugInstalled, hasAugsToInstall } from 'imports/augmentationHelpers.js'
+
+function enrichAugmentation (ns, augmentationName, factionName) {
+  const aug = { name: '', cost: '', rep: '', preReqs: '', faction: '' }
+  aug.name = augmentationName
+  aug.cost = ns.singularity.getAugmentationPrice(augmentationName)
+  aug.rep = ns.singularity.getAugmentationRepReq(augmentationName)
+  const preReqs = ns.singularity.getAugmentationPrereq(augmentationName)
+  const ownedPreReqs = []
+  for (const preReq of preReqs) {
+    if (isAugInstalled(ns, preReq)) {
+      ownedPreReqs.push(preReq)
+    }
+  }
+  aug.preReqs = preReqs.filter(elem => !ownedPreReqs.includes(elem))
+  aug.faction = factionName
+  return aug
+}
 
 function buyAugmentations (ns, necessary = true) {
   let openAugmentations = []
+  if (joinedFaction(ns, 'Bladeburners') && !hasAugsToInstall(ns) && hasMissingAugs(ns, 'Bladeburners', false)) {
+    const bladeburnerAugs = missingAugs(ns, 'Bladeburners', false)
+    ns.print(`Bladeburners has ${bladeburnerAugs.length} augmentations left`)
+    for (const bladeburnerAug of bladeburnerAugs) {
+      const aug = enrichAugmentation(ns, bladeburnerAug, 'Bladeburners')
+      const hasMoney = ns.getPlayer().money >= aug.cost
+      const hasRep = ns.singularity.getFactionRep(aug.faction) >= aug.rep
+      const hasPreReqs = aug.preReqs.length === 0
+      if (!hasPreReqs) {
+        ns.print(`Missing requirements for ${aug.name} from ${aug.faction}`)
+        continue
+      }
+      if (!hasMoney) {
+        ns.print(`Not enough money for ${aug.name} from ${aug.faction}`)
+      }
+      if (!hasRep) {
+        ns.print(`Not enough reputation for ${aug.name} from ${aug.faction}`)
+      }
+      if (hasMoney && hasRep) {
+        const success = ns.singularity.purchaseAugmentation(aug.faction, aug.name)
+        if (!success) {
+          ns.print(`Couldn't buy ${aug.name} from ${aug.faction}`)
+        } else {
+          ns.print(`Bought ${aug.name} from ${aug.faction}`)
+        }
+      }
+      break
+    }
+  }
   let factions = getFactionsSortedByMissingRep(ns, true, necessary)
   const focusFactions = getFocusFactions()
   for (const faction of focusFactions) {
@@ -18,19 +64,7 @@ function buyAugmentations (ns, necessary = true) {
       continue
     }
     for (const augmentation of missingAugs(ns, faction.name, necessary)) {
-      const aug = { name: '', cost: '', rep: '', preReqs: '', faction: '' }
-      aug.name = augmentation
-      aug.cost = ns.singularity.getAugmentationPrice(augmentation)
-      aug.rep = ns.singularity.getAugmentationRepReq(augmentation)
-      const preReqs = ns.singularity.getAugmentationPrereq(augmentation)
-      const ownedPreReqs = []
-      for (const preReq of preReqs) {
-        if (isAugInstalled(ns, preReq)) {
-          ownedPreReqs.push(preReq)
-        }
-      }
-      aug.preReqs = preReqs.filter(elem => !ownedPreReqs.includes(elem))
-      aug.faction = faction.name
+      const aug = enrichAugmentation(ns, augmentation, faction.name)
       openAugmentations.push(aug)
     }
   }

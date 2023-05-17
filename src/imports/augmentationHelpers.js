@@ -76,3 +76,9 @@ export function getAllMissingAugs (ns, factions) {
 export function factionOffersNG (ns, faction) {
   return ns.singularity.getAugmentationsFromFaction(faction).includes('NeuroFlux Governor')
 }
+
+export function hasAugsToInstall (ns) {
+  const purchasedAugmentations = ns.singularity.getOwnedAugmentations(true)
+  const installedAugmentations = ns.singularity.getOwnedAugmentations()
+  return purchasedAugmentations.length !== installedAugmentations.length
+}

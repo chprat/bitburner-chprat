@@ -6,10 +6,13 @@ function joinBladeburner (ns) {
   if (!ns.bladeburner.inBladeburner()) {
     if (!ns.bladeburner.joinBladeburnerDivision()) {
       ns.print("Couldn't join BladeBurner!")
+      return false
     } else {
       ns.print('Joined BladeBurner!')
+      return true
     }
   }
+  return true
 }
 
 function workFor (ns) {
@@ -140,7 +143,10 @@ function spendSkillPoints (ns) {
 
 /** @param {NS} ns **/
 export async function main (ns) {
-  joinBladeburner(ns)
+  const inBladeburner = joinBladeburner(ns)
+  if (!inBladeburner) {
+    return
+  }
   let didRun = false
   if (workFor(ns)) {
     if (!isAugInstalled(ns, "The Blade's Simulacrum")) {

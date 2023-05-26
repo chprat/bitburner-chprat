@@ -6,7 +6,7 @@ export async function main (ns) {
   ns.kill('deployer.js', 'home')
   try {
     ns.stock.getSymbols()
-    ns.kill('trader.js', 'home')
+    ns.kill('stocks.js', 'home')
     for (const sym of ns.stock.getSymbols()) {
       ns.stock.sellStock(sym, ns.stock.getMaxShares(sym))
     }

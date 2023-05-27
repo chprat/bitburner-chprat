@@ -45,7 +45,7 @@ export async function main (ns) {
     }
     ns.print(`Nothing for ${faction}`)
   }
-  const hoursSinceLastAugInstall = ns.getPlayer().playtimeSinceLastAug / 1000 / 60 / 60
+  const hoursSinceLastAugInstall = (Date.now() - ns.getResetInfo().lastAugReset) / 1000 / 60 / 60
   const newAugmentations = purchasedAugmentations.filter(x => !installedAugmentations.includes(x))
   if (newAugmentations.length >= 5 && hoursSinceLastAugInstall >= 24 && !restart) {
     const now = new Date()

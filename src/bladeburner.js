@@ -162,7 +162,7 @@ export async function main (ns) {
     }
   }
   let i = 0
-  const cycles = (Math.floor(ns.getTimeSinceLastAug() / (1000 * 60)) < 30) ? 60 : 600
+  const cycles = (Math.floor((Date.now() - ns.getResetInfo().lastAugReset) / (1000 * 60)) < 30) ? 60 : 600
   while (workFor(ns) && i < cycles) {
     if (!isAugInstalled(ns, "The Blade's Simulacrum")) {
       i += 1

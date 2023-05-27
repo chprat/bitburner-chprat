@@ -161,7 +161,7 @@ export async function main (ns) {
         await deploy(ns, serverName, 'hacker.js', 0)
       }
       await onHome(ns)
-      const sleepTime = (Math.floor(ns.getTimeSinceLastAug() / (1000 * 60)) < 30) ? 60000 : 600000
+      const sleepTime = (Math.floor((Date.now() - ns.getResetInfo().lastAugReset) / (1000 * 60)) < 30) ? 60000 : 600000
       await ns.sleep(sleepTime)
     }
   }

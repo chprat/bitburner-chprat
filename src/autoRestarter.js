@@ -29,7 +29,7 @@ export async function main (ns) {
     if (notPurchasedAugmentationsFromFaction.length === 0) {
       const now = new Date()
       restart = true
-      ns.write(restartReasonFile, `${now.toLocaleString()} (${ns.tFormat(ns.getTimeSinceLastAug())} since last augmentation installation) All augmentations from ${faction} are bought, restart...\n`, 'a')
+      ns.write(restartReasonFile, `${now.toLocaleString()} (${ns.tFormat(Date.now() - ns.getResetInfo().lastAugReset)} since last augmentation installation) All augmentations from ${faction} are bought, restart...\n`, 'a')
       ns.run('restarter.js', 1)
     }
 
@@ -40,7 +40,7 @@ export async function main (ns) {
     if (allNecessaryAugmentationsBought && notPurchasedAugmentationsFromFaction.length !== 0) {
       const now = new Date()
       restart = true
-      ns.write(restartReasonFile, `${now.toLocaleString()} (${ns.tFormat(ns.getTimeSinceLastAug())} since last augmentation installation) All necessary augmentations from ${faction} are bought, restart...\n`, 'a')
+      ns.write(restartReasonFile, `${now.toLocaleString()} (${ns.tFormat(Date.now() - ns.getResetInfo().lastAugReset)} since last augmentation installation) All necessary augmentations from ${faction} are bought, restart...\n`, 'a')
       ns.run('restarter.js', 1)
     }
     ns.print(`Nothing for ${faction}`)
@@ -49,7 +49,7 @@ export async function main (ns) {
   const newAugmentations = purchasedAugmentations.filter(x => !installedAugmentations.includes(x))
   if (newAugmentations.length >= 5 && hoursSinceLastAugInstall >= 24 && !restart) {
     const now = new Date()
-    ns.write(restartReasonFile, `${now.toLocaleString()} (${ns.tFormat(ns.getTimeSinceLastAug())} since last augmentation installation) It's been a while, we should restart...\n`, 'a')
+    ns.write(restartReasonFile, `${now.toLocaleString()} (${ns.tFormat(Date.now() - ns.getResetInfo().lastAugReset)} since last augmentation installation) It's been a while, we should restart...\n`, 'a')
     ns.run('restarter.js', 1)
   }
 }

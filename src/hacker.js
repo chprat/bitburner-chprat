@@ -44,6 +44,7 @@ export async function main (ns) {
     .filter(s => s !== 'home')
     .filter(s => s !== ns.getHostname())
     .filter(s => !s.includes('psrv'))
+    .filter(s => !s.includes('hacknet-server'))
   while (true) {
     for (const server of servers) {
       await hack(ns, server)

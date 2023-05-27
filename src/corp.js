@@ -182,7 +182,7 @@ async function setProductSales (ns, division) {
     if (product.developmentProgress < 100) {
       continue
     }
-    if (product.sCost === 0) {
+    if (product.desiredSellPrice === 0) {
       ns.print(`Sell ${product.name} in ${division.name}`)
       ns.corporation.sellProduct(division.name, mainCity, product.name, 'MAX', 'MP', true)
     }
@@ -192,7 +192,7 @@ async function setProductSales (ns, division) {
       ns.corporation.setProductMarketTA1(division.name, product.name, true)
       ns.corporation.setProductMarketTA2(division.name, product.name, true)
     } else {
-      if (product.sCost === 'MP' || product.cityData[mainCity][0] > 0) {
+      if (product.desiredSellPrice === 'MP' || product.cityData[mainCity][0] > 0) {
         await findBestPrice(ns, division, product)
       }
     }
@@ -201,7 +201,7 @@ async function setProductSales (ns, division) {
 
 /** @param {NS} ns **/
 function hasAPIAccess (ns) {
-  return ns.corporation.hasUnlockUpgrade('Warehouse API') & ns.corporation.hasUnlockUpgrade('Office API')
+  return ns.corporation.hasUnlock('Warehouse API') & ns.corporation.hasUnlock('Office API')
 }
 
 /** @param {NS} ns **/
@@ -450,7 +450,7 @@ function sellMaterials (ns, divisionName) {
   const division = ns.corporation.getDivision(divisionName)
   for (const city of division.cities) {
     for (const material of producedMaterials[division.type]) {
-      if (ns.corporation.getMaterial(division.name, city, material).sCost === 0) {
+      if (ns.corporation.getMaterial(division.name, city, material).desiredSellPrice === 0) {
         ns.corporation.sellMaterial(division.name, city, material, 'MAX', 'MP')
       }
     }
@@ -488,7 +488,7 @@ function buyFirstUpgrades (ns) {
 /** @param {NS} ns **/
 async function buyMaterial (ns, divisionName, cityName, materialName, amount) {
   const material = ns.corporation.getMaterial(divisionName, cityName, materialName)
-  const missingMat = amount - material.qty
+  const missingMat = amount - material.stored
   if (missingMat <= 0) {
     ns.corporation.buyMaterial(divisionName, cityName, materialName, 0)
     return true
@@ -498,7 +498,7 @@ async function buyMaterial (ns, divisionName, cityName, materialName, amount) {
     return false
   }
   ns.corporation.buyMaterial(divisionName, cityName, materialName, missingMat / 10)
-  while (ns.corporation.getMaterial(divisionName, cityName, materialName).qty < amount) {
+  while (ns.corporation.getMaterial(divisionName, cityName, materialName).stored < amount) {
     await ns.sleep(100)
   }
   ns.corporation.buyMaterial(divisionName, cityName, materialName, 0)
@@ -564,7 +564,7 @@ function checkInvestmentOffer (ns, round) {
     ns.corporation.acceptInvestmentOffer()
     return true
   } else {
-    ns.print(`Offer ${offer.funds} in round ${offer.round} is to low (${offers[round]}).`)
+    ns.print(`Offer ${ns.formatNumber(offer.funds)} in round ${offer.round} is to low (${ns.formatNumber(offers[round])}).`)
     return false
   }
 }
@@ -743,7 +743,7 @@ export async function main (ns) {
   if (ns.corporation.getCorporation().divisions.length === 0) {
     ns.print("You don't have a division, yet. Creating Agriculture sector")
     ns.corporation.expandIndustry('Agriculture', 'Agri')
-    ns.corporation.unlockUpgrade('Smart Supply')
+    ns.corporation.purchaseUnlock('Smart Supply')
     expandCities(ns, 'Agri')
   }
   if (!hasAPIAccess(ns)) {

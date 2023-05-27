@@ -85,7 +85,7 @@ function doCompanyWork (ns) {
     if (!factionJoined) {
       const title = ns.getPlayer().jobs[company]
       success = ns.singularity.applyToCompany(company, job)
-      if (title === null) {
+      if (title === null || title === undefined) {
         if (success) {
           ns.print(`Applied at ${company} as ${ns.getPlayer().jobs[company]}`)
         } else {

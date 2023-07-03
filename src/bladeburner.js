@@ -1,4 +1,5 @@
 import { isAugInstalled } from 'imports/augmentationHelpers.js'
+import { workForBladeburner } from 'imports/workHelpers.js'
 
 /** @param {NS} ns **/
 function joinBladeburner (ns) {
@@ -12,24 +13,6 @@ function joinBladeburner (ns) {
     }
   }
   return true
-}
-
-/** @param {NS} ns **/
-function workFor (ns) {
-  if (isAugInstalled(ns, "The Blade's Simulacrum")) {
-    return true
-  }
-  if (ns.getResetInfo().currentNode === 7) {
-    return true
-  }
-  const bonusTime = ns.bladeburner.getBonusTime()
-  if (bonusTime > 1000) {
-    ns.print(`We have some bonus time, continuing... (${bonusTime})`)
-    return true
-  } else {
-    ns.print(`No bonus time, nothing to do. (${bonusTime})`)
-  }
-  return false
 }
 
 /** @param {NS} ns **/
@@ -153,7 +136,7 @@ export async function main (ns) {
     return
   }
   let didRun = false
-  if (workFor(ns)) {
+  if (workForBladeburner(ns)) {
     if (!isAugInstalled(ns, "The Blade's Simulacrum")) {
       ns.print("We'll be running... kill deployer and start spendHashes")
       didRun = true
@@ -163,7 +146,7 @@ export async function main (ns) {
   }
   let i = 0
   const cycles = (Math.floor((Date.now() - ns.getResetInfo().lastAugReset) / (1000 * 60)) < 30) ? 60 : 600
-  while (workFor(ns) && i < cycles) {
+  while (workForBladeburner(ns) && i < cycles) {
     if (!isAugInstalled(ns, "The Blade's Simulacrum")) {
       i += 1
     }

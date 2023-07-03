@@ -1,4 +1,5 @@
-import { getFactionWithMostRepAndNG } from 'imports/factionHelpers.js'
+import { getFactionWithMostRepAndNG, joinedFaction } from 'imports/factionHelpers.js'
+import { isAugInstalled, missingAugs } from 'imports/augmentationHelpers.js'
 
 /** @param {NS} ns **/
 export async function main (ns) {
@@ -15,6 +16,15 @@ export async function main (ns) {
   let success = true
   while (success) {
     success = ns.singularity.purchaseAugmentation(factionWithMostRep, 'NeuroFlux Governor')
+  }
+  const stanekFaction = 'Church of the Machine God'
+  if (joinedFaction(ns, stanekFaction)) {
+    const stanekAugs = missingAugs(ns, stanekFaction, false)
+    for (const stanekAug of stanekAugs) {
+      if (!isAugInstalled(ns, stanekAug)) {
+        ns.singularity.purchaseAugmentation(stanekFaction, stanekAug)
+      }
+    }
   }
   ns.singularity.installAugmentations('deployer.js')
 }

@@ -52,6 +52,7 @@ function buyAugmentations (ns, necessary = true) {
     }
   }
   let factions = getFactionsSortedByMissingRep(ns, true, necessary)
+    .filter(e => e.name !== 'Church of the Machine God')
   const focusFactions = getFocusFactions()
   for (const faction of focusFactions) {
     if (hasMissingAugs(ns, faction, necessary) && joinedFaction(ns, faction)) {

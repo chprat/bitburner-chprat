@@ -1,6 +1,7 @@
 import { getBestCrimeForWork } from 'imports/crimeHelpers.js'
 import { getCompanies, joinedFaction } from 'imports/factionHelpers.js'
 import { isAugInstalled } from 'imports/augmentationHelpers.js'
+import { workForBladeburner } from 'imports/workHelpers.js'
 
 /** @param {NS} ns **/
 function mirrorPlayer (ns, sleeveNo) {
@@ -132,6 +133,14 @@ function hacking (ns, sleeveNo) {
   return false
 }
 
+/** @param {NS} ns */
+function bladeburner (ns) {
+  const sleeveAmount = ns.sleeve.getNumSleeves()
+  for (let i = 0; i < sleeveAmount; i++) {
+    ns.sleeve.setToBladeburnerAction(i, 'Infiltrate Synthoids')
+  }
+}
+
 /** @param {NS} ns **/
 export async function main (ns) {
   const sleeveAmount = ns.sleeve.getNumSleeves()
@@ -143,6 +152,17 @@ export async function main (ns) {
     }
     if (sleeveStats.sync < 100) {
       ns.sleeve.setToSynchronize(i)
+      continue
+    }
+
+    const hasAgility = ns.getPlayer().skills.agility > 100
+    const hasCharisma = ns.getPlayer().skills.charisma > 100
+    const hasDefense = ns.getPlayer().skills.defense > 100
+    const hasDexterity = ns.getPlayer().skills.dexterity > 100
+    const hasStrength = ns.getPlayer().skills.strength > 100
+    const hasSkills = hasAgility && hasCharisma && hasDefense && hasDexterity && hasStrength
+    if (workForBladeburner(ns) && hasSkills) {
+      bladeburner(ns)
       continue
     }
 

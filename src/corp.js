@@ -7,7 +7,7 @@ async function sleepOneCycle (ns) {
 function getProductData (ns, division) {
   const productData = []
   for (const product of division.products) {
-    productData.push(ns.corporation.getProduct(division.name, product))
+    productData.push(ns.corporation.getProduct(division.name, mainCity, product))
   }
   return productData
 }
@@ -93,7 +93,7 @@ function getFreeProductName (ns, division) {
   for (let i = 0; i < division.products.length + 1; i++) {
     const prodName = division.name.concat((i + 1).toString())
     try {
-      ns.corporation.getProduct(division.name, prodName)
+      ns.corporation.getProduct(division.name, mainCity, prodName)
     } catch (err) {
       return prodName
     }

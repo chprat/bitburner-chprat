@@ -11,6 +11,20 @@ function setup6Board (ns) {
 }
 
 /** @param {NS} ns */
+function setup7Board (ns) {
+  ns.stanek.placeFragment(1, 0, 2, 27)
+  ns.stanek.placeFragment(4, 0, 1, 30)
+  ns.stanek.placeFragment(5, 0, 3, 28)
+  ns.stanek.placeFragment(0, 1, 1, 6)
+  ns.stanek.placeFragment(1, 1, 1, 25)
+  ns.stanek.placeFragment(2, 2, 0, 18)
+  ns.stanek.placeFragment(4, 3, 2, 7)
+  ns.stanek.placeFragment(0, 4, 0, 0)
+  ns.stanek.placeFragment(2, 4, 2, 5)
+  ns.stanek.placeFragment(4, 4, 0, 1)
+}
+
+/** @param {NS} ns */
 export async function main (ns) {
   if (!ns.stanek.acceptGift()) {
     ns.print("Couldn't join the Church of the Machine God")
@@ -25,6 +39,8 @@ export async function main (ns) {
 
   if (boardSize === 6 && boardFragments === 0) {
     setup6Board(ns)
+  } else if (boardHeight === 6 && boardWidth === 7 && boardFragments === 0) {
+    setup7Board(ns)
   }
 
   while (true) {

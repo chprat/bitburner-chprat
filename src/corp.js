@@ -103,8 +103,17 @@ function getFreeProductName (ns, division) {
 /** @param {NS} ns **/
 async function developNewProduct (ns, division, productName) {
   ns.print(`Develop new product ${productName} in ${division.name}`)
+  const corporationFunds = ns.corporation.getCorporation().funds
+  const developmentCost = designInvest + marketingInvest
   try {
-    ns.corporation.makeProduct(division.name, mainCity, productName, designInvest, marketingInvest)
+    if (corporationFunds > developmentCost) {
+      ns.corporation.makeProduct(division.name, mainCity, productName, designInvest, marketingInvest)
+    } else {
+      ns.print(`Not enough money to develop new product ${productName} for ` +
+        `${division.name} in ${mainCity} (has ${ns.formatNumber(corporationFunds)}, ` +
+        `${ns.formatNumber(developmentCost)} required)`)
+      return
+    }
   } catch (err) {
     const newProductName = getFreeProductName(ns, division)
     ns.print(`${productName} in ${division.name} already exists, retry ${newProductName}`)

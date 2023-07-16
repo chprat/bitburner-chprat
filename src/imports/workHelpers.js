@@ -19,9 +19,11 @@ export function getPrograms (ns) {
 }
 
 /** @param {NS} ns **/
-export function workForBladeburner (ns) {
-  if (isAugInstalled(ns, "The Blade's Simulacrum")) {
-    return true
+export function workForBladeburner (ns, ignoreSimulacrum = false) {
+  if (!ignoreSimulacrum) {
+    if (isAugInstalled(ns, "The Blade's Simulacrum", false)) {
+      return true
+    }
   }
   if (ns.getResetInfo().currentNode === 7) {
     return true

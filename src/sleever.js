@@ -161,7 +161,7 @@ export async function main (ns) {
     const hasDexterity = ns.getPlayer().skills.dexterity > 100
     const hasStrength = ns.getPlayer().skills.strength > 100
     const hasSkills = hasAgility && hasCharisma && hasDefense && hasDexterity && hasStrength
-    if (workForBladeburner(ns) && hasSkills) {
+    if (workForBladeburner(ns, true) && hasSkills) {
       bladeburner(ns)
       continue
     }

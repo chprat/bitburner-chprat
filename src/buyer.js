@@ -1,5 +1,5 @@
 import { joinedFaction, getFactionsSortedByMissingRep, getAllFactionsWithMissingAugs, CriminalFactions, EndGameFactions, getFocusFactions } from 'imports/factionHelpers.js'
-import { augIsNecessary, hasMissingAugs, missingAugs, hasAugsToInstall, enrichAugmentation } from 'imports/augmentationHelpers.js'
+import { augIsNecessary, hasMissingAugs, missingAugs, hasAugsToInstall, enrichAugmentation, maxNeededReputation } from 'imports/augmentationHelpers.js'
 
 /** @param {NS} ns **/
 function buyBladeburnerAugmentations (ns) {
@@ -92,6 +92,12 @@ function buyAugmentations (ns, necessary = true) {
   for (const faction of factions) {
     if (!hasMissingAugs(ns, faction.name, necessary)) {
       ns.print(`We don't need any augmentations from ${faction.name}`)
+      continue
+    }
+    const factionRep = ns.singularity.getFactionRep(faction.name)
+    const maxNeededRep = maxNeededReputation(ns, faction.name, necessary)
+    if (factionRep < maxNeededRep) {
+      ns.print(`We haven't reached the maximum required reputation for ${faction.name}`)
       continue
     }
     for (const augmentation of missingAugs(ns, faction.name, necessary)) {

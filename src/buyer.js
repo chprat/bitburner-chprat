@@ -38,10 +38,46 @@ function buyBladeburnerAugmentations (ns) {
 }
 
 /** @param {NS} ns **/
+function buyBladesSimulacrum (ns) {
+  const bladeburnerAugs = missingAugs(ns, 'Bladeburners', false)
+  const openAugmentations = []
+  for (const bladeburnerAug of bladeburnerAugs) {
+    const aug = enrichAugmentation(ns, bladeburnerAug, 'Bladeburners')
+    openAugmentations.push(aug)
+  }
+  if (openAugmentations.filter(e => e.name === "The Blade's Simulacrum").length > 0) {
+    const aug = openAugmentations.filter(e => e.name === "The Blade's Simulacrum")[0]
+    const hasMoney = ns.getPlayer().money >= aug.cost
+    const hasRep = ns.singularity.getFactionRep(aug.faction) >= aug.rep
+    const hasPreReqs = aug.preReqs.length === 0
+    if (!hasPreReqs) {
+      ns.print(`Missing requirements for ${aug.name} from ${aug.faction}`)
+    }
+    if (!hasMoney) {
+      ns.print(`Not enough money for ${aug.name} from ${aug.faction}`)
+    }
+    if (!hasRep) {
+      ns.print(`Not enough reputation for ${aug.name} from ${aug.faction}`)
+    }
+    if (hasMoney && hasRep) {
+      const success = ns.singularity.purchaseAugmentation(aug.faction, aug.name)
+      if (!success) {
+        ns.print(`Couldn't buy ${aug.name} from ${aug.faction}`)
+      } else {
+        ns.print(`Bought ${aug.name} from ${aug.faction}`)
+      }
+    }
+  }
+}
+
+/** @param {NS} ns **/
 function buyAugmentations (ns, necessary = true) {
   let openAugmentations = []
   if (joinedFaction(ns, 'Bladeburners') && !hasAugsToInstall(ns) && hasMissingAugs(ns, 'Bladeburners', false)) {
     buyBladeburnerAugmentations(ns)
+  }
+  if (joinedFaction(ns, 'Bladeburners')) {
+    buyBladesSimulacrum(ns)
   }
   let factions = getFactionsSortedByMissingRep(ns, true, necessary)
     .filter(e => e.name !== 'Church of the Machine God')

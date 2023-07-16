@@ -89,3 +89,21 @@ export function hasAugsToInstall (ns) {
   const installedAugmentations = ns.singularity.getOwnedAugmentations()
   return purchasedAugmentations.length !== installedAugmentations.length
 }
+
+/** @param {NS} ns **/
+export function enrichAugmentation (ns, augmentationName, factionName) {
+  const aug = { name: '', cost: '', rep: '', preReqs: '', faction: '' }
+  aug.name = augmentationName
+  aug.cost = ns.singularity.getAugmentationPrice(augmentationName)
+  aug.rep = ns.singularity.getAugmentationRepReq(augmentationName)
+  const preReqs = ns.singularity.getAugmentationPrereq(augmentationName)
+  const ownedPreReqs = []
+  for (const preReq of preReqs) {
+    if (isAugInstalled(ns, preReq)) {
+      ownedPreReqs.push(preReq)
+    }
+  }
+  aug.preReqs = preReqs.filter(elem => !ownedPreReqs.includes(elem))
+  aug.faction = factionName
+  return aug
+}

@@ -1,23 +1,5 @@
 import { joinedFaction, getFactionsSortedByMissingRep, getAllFactionsWithMissingAugs, CriminalFactions, EndGameFactions, getFocusFactions } from 'imports/factionHelpers.js'
-import { augIsNecessary, hasMissingAugs, missingAugs, isAugInstalled, hasAugsToInstall } from 'imports/augmentationHelpers.js'
-
-/** @param {NS} ns **/
-function enrichAugmentation (ns, augmentationName, factionName) {
-  const aug = { name: '', cost: '', rep: '', preReqs: '', faction: '' }
-  aug.name = augmentationName
-  aug.cost = ns.singularity.getAugmentationPrice(augmentationName)
-  aug.rep = ns.singularity.getAugmentationRepReq(augmentationName)
-  const preReqs = ns.singularity.getAugmentationPrereq(augmentationName)
-  const ownedPreReqs = []
-  for (const preReq of preReqs) {
-    if (isAugInstalled(ns, preReq)) {
-      ownedPreReqs.push(preReq)
-    }
-  }
-  aug.preReqs = preReqs.filter(elem => !ownedPreReqs.includes(elem))
-  aug.faction = factionName
-  return aug
-}
+import { augIsNecessary, hasMissingAugs, missingAugs, hasAugsToInstall, enrichAugmentation } from 'imports/augmentationHelpers.js'
 
 /** @param {NS} ns **/
 function buyAugmentations (ns, necessary = true) {

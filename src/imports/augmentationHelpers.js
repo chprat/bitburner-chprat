@@ -107,3 +107,19 @@ export function enrichAugmentation (ns, augmentationName, factionName) {
   aug.faction = factionName
   return aug
 }
+
+/** @param {NS} ns */
+export function maxNeededReputation (ns, faction, necessary = true) {
+  const augs = missingAugs(ns, faction, necessary)
+  let enrichedAugs = []
+  for (const aug of augs) {
+    const enrichedAug = enrichAugmentation(ns, aug, faction)
+    enrichedAugs.push(enrichedAug)
+  }
+  enrichedAugs = enrichedAugs.sort((a, b) => b.cost - a.cost)
+  if (enrichedAugs.length > 0) {
+    return enrichedAugs[0].rep
+  } else {
+    return 0
+  }
+}

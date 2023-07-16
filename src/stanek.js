@@ -43,7 +43,7 @@ export async function main (ns) {
     setup7Board(ns)
   }
 
-  while (true) {
+  while (true && placedFragments.length > 0) {
     for (const fragment of placedFragments) {
       // booster fragments can't be charged
       if (fragment.type !== boosterFragmentID) {

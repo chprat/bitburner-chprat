@@ -368,12 +368,14 @@ function enableSmartSupply (ns) {
   for (const divisionName of ns.corporation.getCorporation().divisions) {
     const division = ns.corporation.getDivision(divisionName)
     for (const city of division.cities) {
-      if (!ns.corporation.getWarehouse(division.name, city).smartSupplyEnabled) {
-        if (ns.corporation.hasWarehouse(division.name, city)) {
-          ns.corporation.setSmartSupply(division.name, city, true)
-        } else {
-          ns.print(`${city} of ${division.name} doesn't have a warehouse, can't enable SmartSupply!`)
-          return false
+      if (ns.corporation.hasWarehouse(division.name, city)) {
+        if (!ns.corporation.getWarehouse(division.name, city).smartSupplyEnabled) {
+          if (ns.corporation.hasWarehouse(division.name, city)) {
+            ns.corporation.setSmartSupply(division.name, city, true)
+          } else {
+            ns.print(`${city} of ${division.name} doesn't have a warehouse, can't enable SmartSupply!`)
+            return false
+          }
         }
       }
     }

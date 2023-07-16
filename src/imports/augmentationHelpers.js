@@ -14,8 +14,8 @@ export function hasMissingAugs (ns, faction, necessary = true) {
 }
 
 /** @param {NS} ns **/
-export function isAugInstalled (ns, aug) {
-  return ns.singularity.getOwnedAugmentations(true).includes(aug)
+export function isAugInstalled (ns, aug, installed = true) {
+  return ns.singularity.getOwnedAugmentations(installed).includes(aug)
 }
 
 /** @param {NS} ns **/

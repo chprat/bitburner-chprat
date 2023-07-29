@@ -28,6 +28,9 @@ export function workForBladeburner (ns, ignoreSimulacrum = false) {
   if (ns.getResetInfo().currentNode === 7) {
     return true
   }
+  if (!ns.bladeburner.inBladeburner()) {
+    return false
+  }
   const bonusTime = ns.bladeburner.getBonusTime()
   if (bonusTime > 1000) {
     ns.print(`We have some bonus time, continuing... (${bonusTime})`)

@@ -29,7 +29,7 @@ function getStaminaRatio (ns) {
 }
 
 /** @param {NS} ns **/
-function getBlackOps (ns) {
+export function getOpenBlackOp (ns) {
   const blackOpNames = ns.bladeburner.getBlackOpNames()
   const blackOps = []
   for (const blackOpName of blackOpNames) {
@@ -41,7 +41,12 @@ function getBlackOps (ns) {
     }
     blackOps.push(blackOp)
   }
-  const blackOp = blackOps.sort((a, b) => a.rank - b.rank).filter(e => e.remainingCount !== 0)[0]
+  return blackOps.sort((a, b) => a.rank - b.rank).filter(e => e.remainingCount !== 0)[0]
+}
+
+/** @param {NS} ns **/
+function getBlackOps (ns) {
+  const blackOp = getOpenBlackOp(ns)
   if (!blackOp) {
     return false
   }

@@ -17,7 +17,7 @@ function joinBladeburner (ns) {
 
 /** @param {NS} ns **/
 function stopWork (ns) {
-  if (!isAugInstalled(ns, "The Blade's Simulacrum")) {
+  if (!isAugInstalled(ns, "The Blade's Simulacrum", false)) {
     ns.singularity.stopAction()
   }
 }

@@ -1,4 +1,23 @@
-import { augIsNecessary } from 'imports/augmentationHelpers.js'
+import { augIsNecessary, isAugInstalled } from 'imports/augmentationHelpers.js'
+import { getOpenBlackOp } from './bladeburner.js'
+
+/** @param {NS} ns **/
+function continueBN12 (ns) {
+  const currentBN = ns.getResetInfo().currentNode
+  const inBN12 = currentBN === 12
+  const w0r1dd43m0nOpenPortCount = isAugInstalled(ns, 'The Red Pill', false) ? ns.getServer('w0r1d_d43m0n').openPortCount : 0
+  const w0r1dd43m0nOpenPortReq = isAugInstalled(ns, 'The Red Pill', false) ? ns.getServer('w0r1d_d43m0n').numOpenPortsRequired : Infinity
+  const w0r1dd43m0nHackingSkill = isAugInstalled(ns, 'The Red Pill', false) ? ns.getServer('w0r1d_d43m0n').requiredHackingSkill : Infinity
+  const playerHackingSkill = ns.getHackingLevel()
+  const w0r1dd43m0nBackdoor = (w0r1dd43m0nOpenPortCount === w0r1dd43m0nOpenPortReq) && (w0r1dd43m0nHackingSkill <= playerHackingSkill)
+  const openBlackOp = ns.bladeburner.inBladeburner() ? getOpenBlackOp(ns) : []
+  if ((!openBlackOp || w0r1dd43m0nBackdoor) && inBN12) {
+    ns.rm('restartReason.txt')
+    ns.rm('bntime.txt')
+    ns.write('bntime.txt', `Time to beat last BitNode: ${ns.tFormat(Date.now() - ns.getResetInfo().lastNodeReset)}\n`, 'a')
+    ns.singularity.destroyW0r1dD43m0n(12, 'deployer.js')
+  }
+}
 
 /** @param {NS} ns **/
 export async function main (ns) {
@@ -7,6 +26,7 @@ export async function main (ns) {
   const purchasedAugmentations = ns.singularity.getOwnedAugmentations(true)
   const installedAugmentations = ns.singularity.getOwnedAugmentations()
   let restart = false
+  continueBN12(ns)
   for (const faction of factions) {
     const factionAugmentations = ns.singularity.getAugmentationsFromFaction(faction)
 

@@ -20,6 +20,9 @@ export function getPrograms (ns) {
 
 /** @param {NS} ns **/
 export function workForBladeburner (ns, ignoreSimulacrum = false) {
+  if (disableBladeburner) {
+    return false
+  }
   if (!ignoreSimulacrum) {
     if (isAugInstalled(ns, "The Blade's Simulacrum", false)) {
       return true
@@ -40,3 +43,5 @@ export function workForBladeburner (ns, ignoreSimulacrum = false) {
   }
   return false
 }
+
+const disableBladeburner = true

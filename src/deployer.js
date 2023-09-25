@@ -44,7 +44,6 @@ async function onHome (ns) {
     { name: 'hacker.js', threads: 0, mem: 0 },
     { name: 'deployer.js', threads: 1, mem: 0 },
     { name: 'solver.js', threads: 1, mem: 0 },
-    { name: 'trader.js', threads: 0, mem: 0 },
     { name: 'corp.js', threads: 0, mem: 0 },
     { name: 'gang.js', threads: 1, mem: 0 },
     { name: 'psrv.js', threads: 1, mem: 0 },
@@ -58,7 +57,7 @@ async function onHome (ns) {
     { name: 'autoRestarter.js', threads: 1, mem: 0 },
     { name: 'bladeburner.js', threads: 0, mem: 0 }
   ]
-  const optionalScripts = ['trader.js', 'corp.js', 'bladeburner.js']
+  const optionalScripts = ['corp.js', 'bladeburner.js']
   const waitForScripts = [
     'bootstrapper.js',
     'solver.js',
@@ -101,9 +100,6 @@ async function onHome (ns) {
   scripts.find(e => e.name === 'hacker.js').threads = (hackThreads > 1) ? hackThreads : 1
   for (const script of scripts) {
     if (!ns.scriptRunning(script.name, 'home')) {
-      if (script.name === 'trader.js') {
-        continue
-      }
       if (script.threads > 0) {
         let pid
         if (waitForScripts.includes(script.name)) {
